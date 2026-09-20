@@ -77,6 +77,13 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 .luck-btn{position:relative;border:1.5px solid #d9c2a5!important;box-shadow:0 5px 14px #69492f0d;transition:.15s}
 .luck-btn:after{content:"눌러보기";display:block;margin-top:5px;font-size:9px;font-weight:800;color:#9a6644}
 .luck-btn.on:after{content:"선택됨";color:#68412b}
+
+/* Practical decade reading */
+.luck-why{margin:0 0 13px!important;padding:14px 15px;border-radius:14px;background:#fff9f0;border-left:3px solid #a46d49;font-size:12px!important;line-height:1.7!important}.luck-why b{font-size:14px;color:#573723}
+.luck-period{font-size:12px;font-weight:900;color:#8a5a3c;letter-spacing:.2px}.luck-headline{font-size:17px;font-weight:900;line-height:1.5;color:#30251e;margin:7px 0 14px}
+.life-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.life-grid>div{padding:12px;border-radius:12px;background:#fffaf3;border:1px solid #eadbc8}.life-grid b{display:block;font-size:12px;margin-bottom:5px;color:#493327}.life-grid span{display:block;font-size:11px;line-height:1.6;color:#6f6258}.life-grid .wide{grid-column:1/-1}
+.theory-toggle{margin-top:13px;padding-top:12px;border-top:1px dashed #d9c8b4}.theory-toggle>b{font-size:11px;color:#8c796a}.theory-toggle p{font-size:10.5px!important;margin:9px 0 0!important;color:#887b70!important}
+@media(max-width:360px){.life-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body><main class="app">
@@ -99,7 +106,7 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 <div class="result-card"><span class="section-kicker">03 · ELEMENTS</span><h3>오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>나를 나타내는 일간</h3><p id="dayMaster"></p></div>
 <div class="result-card"><h3>십성 · 관계의 구조</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
-<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><div class="tap-guide"><b>👇 대운을 눌러 자세히 확인해보세요</b><span>각 시기별 합·충·관계와 해석이 아래에 펼쳐집니다.</span></div><p id="luckMeta"></p><div id="luckPillars"></div></div>
+<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><p class="luck-why"><b>왜 10년씩 보나요?</b><br>대운은 약 10년 단위로 삶의 큰 흐름이 어떻게 달라지는지를 살펴보는 방식입니다. 지금의 흐름과 다음 시기의 핵심 주제를 비교해보세요.</p><div class="tap-guide"><b>👇 대운을 눌러 자세히 확인해보세요</b><span>각 시기별 합·충·관계와 해석이 아래에 펼쳐집니다.</span></div><p id="luckMeta"></p><div id="luckPillars"></div></div>
 <div class="result-card detail-card"><span class="section-kicker">05 · READING</span><h3>상세 풀이</h3><div id="detailReading"></div><p style="margin-top:12px">※ 전통 명리 해석의 일반적인 관점에 따른 참고용 설명이며, 중요한 의사결정을 대신하지 않습니다.</p></div>
 
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
@@ -138,14 +145,26 @@ function tripleRelations(luckBranch,natal){
  return [...new Set(out)];
 }
 function relationNarrative(rel){
- if(!rel.length)return '원국과 이 대운 사이에서 이번 버전에 표시하는 주요 관계는 두드러지지 않습니다. 이는 좋고 나쁨을 뜻하지 않으며 다른 십성·세운 요소는 별도로 살펴야 합니다.';
+ if(!rel.length)return '원국과 이 대운 사이에서 두드러지는 주요 관계가 적은 구간입니다. 큰 사건이 없다는 뜻은 아니며, 이때는 십성과 해마다 들어오는 세운을 함께 살펴보는 것이 좋습니다.';
  const types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
- let t='원국과 대운 사이에 '+types.join('·')+' 관계가 확인됩니다. ';
- if(types.includes('삼합'))t+='세 지지가 한 묶음으로 갖춰지는 삼합은 특정 오행의 흐름이 강하게 연결되는 구조로 봅니다. ';
- if(types.some(x=>x.includes('형')))t+='형은 압박·조정·반복 같은 긴장을 살피는 관계로 사용합니다. ';
- if(types.includes('충'))t+='충은 서로 마주 보는 지지의 변화와 이동 가능성을 살피는 관계입니다. ';
- if(types.includes('합'))t+='합은 두 지지가 서로 연결되는 관계를 뜻합니다. ';
- return t+'관계 하나만으로 사건이나 길흉을 단정하지 않고 발생 위치와 전체 원국을 함께 해석합니다.';
+ let t='';
+ if(types.includes('삼합'))t+='서로 흩어져 있던 조건이 한 방향으로 모이기 쉬운 흐름을 살펴볼 수 있습니다. ';
+ if(types.some(x=>x.includes('형')))t+='일이나 관계에서 압박·반복·조정이 필요한 장면이 늘어나는지 살펴볼 시기입니다. ';
+ if(types.includes('충'))t+='직장·거주·관계처럼 익숙한 구조를 바꾸고 싶은 움직임이 커지는지 살펴볼 수 있습니다. ';
+ if(types.includes('합'))t+='사람·일·기회가 새롭게 연결되거나 기존 관계가 더 깊어지는 흐름을 살펴볼 수 있습니다. ';
+ if(types.includes('파')||types.includes('해'))t+='기존 계획이나 관계의 미세한 균열, 오해, 방향 수정이 필요한지도 함께 살펴보세요. ';
+ return t+'이 관계만으로 실제 사건이나 길흉을 단정하지는 않습니다.';
+}
+function luckLifeReading(stem,branch,rel){
+ const el=stemEl[stem]||branchEl[branch]||'', types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
+ const focus={목:'성장과 확장',화:'표현과 활동',토:'안정과 기반',금:'결단과 정리',수:'이동과 탐색'}[el]||'변화와 선택';
+ let headline='이 10년은 ‘'+focus+'’이 중요한 주제가 될 수 있습니다.';
+ let work={목:'새로운 역할·배움·확장 기회를 어떻게 잡을지',화:'성과를 드러내고 활동 범위를 넓히는 과정에서 무엇을 선택할지',토:'직업과 생활 기반을 얼마나 안정적으로 다질지',금:'불필요한 것을 정리하고 중요한 결정을 어떻게 내릴지',수:'새로운 정보·환경·이동 가능성을 어떻게 활용할지'}[el]||'일의 방향을 어떻게 조정할지';
+ let money={목:'성장을 위해 쓰는 돈과 장기적인 투입의 균형',화:'활동이 커질수록 함께 커질 수 있는 지출 관리',토:'저축·자산·생활비처럼 기반을 지키는 관리',금:'수입과 지출 구조를 정리하고 기준을 세우는 일',수:'수입원의 변화나 유동적인 자금 흐름에 대한 관리'}[el]||'수입과 지출의 균형';
+ let love=types.includes('합')?'새로운 인연이나 기존 관계가 가까워지는 흐름이 있는지 살펴보세요.':types.includes('충')?'관계의 거리나 역할이 달라지면서 재정리가 필요한지 살펴보세요.':'관계에서 내가 원하는 방식과 상대의 기대가 어떻게 달라지는지 살펴보세요.';
+ let change=types.includes('충')?'이직·이동·독립처럼 기존 틀을 바꾸는 선택이 중요한 화두가 될 수 있습니다.':types.includes('삼합')?'여러 조건이 한 방향으로 모이면서 규모가 커지거나 집중할 일이 생기는지 살펴보세요.':'급격한 변화보다 이 시기에 반복해서 나타나는 선택과 기회를 관찰해보세요.';
+ let caution=types.some(x=>x.includes('형'))?'압박이 커질 때 무리하게 밀어붙이기보다 반복되는 문제를 먼저 조정하는 편이 좋습니다.':(types.includes('파')||types.includes('해'))?'오해나 계획 변경이 생겼을 때 성급하게 결론 내리지 않는 것이 중요합니다.':'좋고 나쁨을 미리 단정하기보다 실제 상황과 해마다의 흐름을 함께 확인하세요.';
+ return {headline,work,money,love,change,caution};
 }
 function stemRelations(stem,natal){
  const out=[];natal.forEach(n=>{if(stemHap.some(p=>pairHas(p,stem,n.stem)))out.push('천간합 · '+stem+n.stem+' ('+n.label+')')});return out;
@@ -171,7 +190,8 @@ window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').for
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
  const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
- document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간에 들어오는 '+p+'와 원국의 글자를 비교한 기본 관계입니다.</p>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p style="margin:10px 0 0"><b>이 대운에서 읽는 포인트</b><br>'+relationNarrative(rel)+'</p>'};
+ const life=luckLifeReading(stem,branch,rel),endAge=Number(x.age)+9;
+ document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><div class="theory-toggle"><b>명리 관계</b>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div>'};
 window.toggleUnknownTime=val=>{unknownTime=val;const box=document.getElementById('timeInputs');box.classList.toggle('disabled-time',val);['hour','minute'].forEach(id=>{const el=document.getElementById(id);el.disabled=val;if(val)el.value=''});};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
