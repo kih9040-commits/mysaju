@@ -87,7 +87,23 @@ function render(r){
  document.getElementById('tenGods').innerHTML='<div class="pillars">'+order.map(([label,key])=>{const v=tg[key]||{};return '<div class="pillar"><small>'+label+'</small><b style="font:700 13px sans-serif">'+(v.stem||'-')+'</b><span>'+(v.branch||'-')+'</span></div>'}).join('')+'</div>';
  const luck=r.luckPillars;
  const tenLabels=order.map(([label,key])=>tg[key]?.stem).filter(Boolean).filter(x=>x!=='일간');
- document.getElementById('detailReading').innerHTML='<div class="insight"><b>성향의 실마리</b><p>'+dm+'의 특성을 중심에 두고 '+(tenLabels.length?tenLabels.join('·'):'십성')+' 관계가 함께 나타납니다. 십성은 좋고 나쁨을 단정하는 점수가 아니라 관계와 역할의 경향을 읽는 기준입니다.</p></div><div class="insight"><b>오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 계산되었습니다. 개수만으로 신강·신약이나 용신을 확정하지 않고 계절·월령 등 추가 조건과 함께 해석해야 합니다.</p></div>';
+ const dayText={
+ '갑':'갑목은 큰 나무에 비유해 방향성과 성장, 곧게 뻗으려는 성향을 읽는 일간입니다.','을':'을목은 풀과 덩굴에 비유해 유연함과 적응력, 관계 속 성장의 성향을 읽는 일간입니다.',
+ '병':'병화는 태양에 비유해 표현력과 확산, 밝게 드러내는 성향을 읽는 일간입니다.','정':'정화는 등불에 비유해 섬세함과 집중, 필요한 곳을 비추는 성향을 읽는 일간입니다.',
+ '무':'무토는 큰 산과 대지에 비유해 안정감과 포용, 중심을 잡는 성향을 읽는 일간입니다.','기':'기토는 밭과 흙에 비유해 실용성과 돌봄, 차근차근 가꾸는 성향을 읽는 일간입니다.',
+ '경':'경금은 단단한 쇠에 비유해 결단과 실행, 원칙을 세우는 성향을 읽는 일간입니다.','신':'신금은 보석과 세공된 금속에 비유해 정교함과 기준, 완성도를 중시하는 성향을 읽는 일간입니다.',
+ '임':'임수는 큰 강과 바다에 비유해 폭넓은 사고와 이동, 흐름을 만들어가는 성향을 읽는 일간입니다.','계':'계수는 비와 샘물에 비유해 관찰과 섬세함, 조용히 스며드는 성향을 읽는 일간입니다.'
+ };
+ const has=(...xs)=>tenLabels.some(x=>xs.includes(x));
+ const wealth=has('편재','정재')?'재성 관계가 천간에 드러나 있어 현실적인 자원·성과·금전 관리의 주제가 눈에 띕니다. 다만 재성의 존재만으로 재물의 크기나 투자 성패를 판단할 수는 없습니다.':'천간에 재성이 강하게 드러난 구조는 아닙니다. 재물운은 지장간·대운과 전체 균형까지 함께 살펴야 합니다.';
+ const work=has('정관','편관')?'관성 관계가 보여 책임, 규칙, 역할과 관련된 주제가 나타납니다. 조직생활이나 직업 성향은 관성의 강약과 다른 십성의 조합을 함께 봅니다.':has('식신','상관')?'식상 관계가 보여 표현, 기술, 생산성과 관련된 주제가 나타납니다. 실제 직업 적성은 전체 구조와 운의 흐름을 함께 봅니다.':'직업 성향은 한 가지 십성보다 전체 사주의 조합과 대운 흐름을 함께 보는 편이 적절합니다.';
+ const relation=has('비견','겁재')?'비견·겁재 관계가 보여 또래·동료·경쟁과 협력의 주제가 나타납니다. 독립성과 관계의 균형이 중요한 해석 포인트가 될 수 있습니다.':'관계 성향은 일간과 다른 십성의 상호작용을 중심으로 추가 분석이 필요합니다.';
+ document.getElementById('detailReading').innerHTML=
+ '<div class="insight"><b>🌱 타고난 성향</b><p>'+(dayText[stem]||dm+' 일간을 중심으로 성향을 살펴봅니다.')+' 현재 팔자에서는 '+strongest[0]+' 기운이 상대적으로 많이 집계됩니다.</p></div>'+
+ '<div class="insight"><b>💰 재물과 현실 감각</b><p>'+wealth+'</p></div>'+
+ '<div class="insight"><b>💼 직업과 일</b><p>'+work+'</p></div>'+
+ '<div class="insight"><b>🤝 인간관계</b><p>'+relation+'</p></div>'+
+ '<div class="insight"><b>⚖️ 오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 집계됩니다. 이 숫자는 표면의 여덟 글자를 센 값이며, 신강·신약·용신은 월령과 지장간 등 추가 조건 없이 확정하지 않습니다.</p></div>';
  if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+(luck.pillars||[]).map(x=>'<div class="pillar" style="min-width:72px"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></div>').join('')+'</div>'}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
  showPage('result')
 }
