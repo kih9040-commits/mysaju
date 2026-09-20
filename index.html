@@ -6,7 +6,7 @@
 <style>
 :root{--bg:#f7f2e8;--paper:#fffdf8;--ink:#28241f;--muted:#7d756b;--line:#e5dacb;--accent:#805c43;--dark:#2d2924}
 *{box-sizing:border-box}body{margin:0;background:#eee9df;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
-button,input{font:inherit}.app{max-width:520px;min-height:100vh;margin:auto;background:var(--bg);box-shadow:0 0 40px #00000010}
+button,input,select{font:inherit}.app{max-width:520px;min-height:100vh;margin:auto;background:var(--bg);box-shadow:0 0 40px #00000010}
 header{height:68px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #805c4312}.logo{font-size:21px;font-weight:900}.logo b{color:var(--accent)}header small{color:var(--muted)}
 .page{display:none;padding:30px 22px 55px}.page.on{display:block}.home{text-align:center;padding-top:55px}.seal{width:108px;height:108px;margin:0 auto 28px;border:1px solid #dbc4a8;border-radius:50%;display:grid;place-items:center;font:42px serif;color:var(--accent);box-shadow:0 15px 35px #805c4320}
 h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font-style:normal;color:var(--accent)}.lead{color:var(--muted);line-height:1.8;font-size:14px;margin-bottom:30px}
@@ -14,7 +14,7 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 .features{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left}.card,.result-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:18px}.card b{display:block;margin:8px 0}.card span{font-size:12px;color:var(--muted);line-height:1.6}
 .back{border:0;background:none;color:var(--muted);padding:0;margin-bottom:28px}.page h2{font-size:28px;letter-spacing:-1.5px;margin:0 0 8px}.desc{font-size:13px;color:var(--muted);line-height:1.7;margin-bottom:28px}
 .field{margin:0 0 20px}.field label{display:block;font-size:13px;font-weight:800;margin-bottom:9px}.control{width:100%;height:55px;border:1px solid #ddd1c1;background:var(--paper);border-radius:13px;padding:0 14px;outline:0}.control:focus{border-color:var(--accent)}
-.timegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choice{height:52px;border:1px solid #ddd1c1;border-radius:13px;background:var(--paper)}.choice.on{background:#eadfce;border-color:var(--accent);font-weight:800}
+.timegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.choicegrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.triple{grid-template-columns:1fr 1fr 1fr}.choice{height:52px;border:1px solid #ddd1c1;border-radius:13px;background:var(--paper)}.choice.on{background:#eadfce;border-color:var(--accent);font-weight:800}
 .note{font-size:11px;color:#756e65;background:#eee5d8;padding:14px;border-radius:13px;line-height:1.65;margin:24px 0}
 .loading{min-height:70vh;display:grid;place-items:center;text-align:center}.orbit{width:110px;height:110px;border:1px solid #ccb79b;border-radius:50%;display:grid;place-items:center;margin:auto;font:38px serif;animation:pulse 1.2s ease-in-out infinite}@keyframes pulse{50%{transform:scale(.94);opacity:.65}}
 .result-head{text-align:center;margin:5px 0 25px}.result-head small{color:var(--accent);font-weight:800}.result-head h2{margin:8px 0}.result-card{margin-bottom:12px}.result-card h3{margin:0 0 12px;font-size:17px}.result-card p{font-size:12px;color:var(--muted);line-height:1.7}
@@ -26,9 +26,9 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 <body><main class="app">
 <header><div class="logo">사주<b>로움</b></div><small>나를 알아가는 새로운 사주</small></header>
 <section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">V2에서는 입력한 생년월일과 출생시간으로<br>실제 만세력의 네 기둥을 계산합니다.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">V2 · 정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card">☯️<b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card">🌿<b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card">🧭<b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card">✨<b>확장 준비</b><span>십성·대운·세운은 다음 버전에서 연결</span></div></div></section>
-<section id="form" class="page"><button class="back" onclick="showPage('home')">← 돌아가기</button><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">현재 V2 1차 버전은 양력 생일을 기준으로 계산합니다.</p>
+<section id="form" class="page"><button class="back" onclick="showPage('home')">← 돌아가기</button><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">양력 또는 음력 생년월일을 선택해 계산합니다.</p><div class="field"><label>생일 기준</label><div class="choicegrid"><button class="choice calendar on" onclick="calendarPick(this,false)">양력</button><button class="choice calendar" onclick="calendarPick(this,true)">음력</button></div></div>
 <div class="field"><label>이름 또는 별명</label><input id="name" class="control" placeholder="예: 로움"></div>
-<div class="field"><label>양력 생년월일</label><input id="birth" class="control" type="date" min="1900-01-01" max="2050-12-31"></div>
+<div class="field"><label id="birthLabel">양력 생년월일</label><input id="birth" class="control" type="date" min="1900-01-01" max="2050-12-31"></div><div id="leapField" class="field" style="display:none"><label>음력 윤달 여부</label><div class="choicegrid"><button class="choice leap on" onclick="leapPick(this,false)">평달</button><button class="choice leap" onclick="leapPick(this,true)">윤달</button></div></div>
 <div class="field"><label>태어난 시각</label><div class="timegrid"><input id="hour" class="control" type="number" min="0" max="23" placeholder="시 (0~23)"><input id="minute" class="control" type="number" min="0" max="59" placeholder="분 (0~59)"></div></div>
 <div class="field"><label>출생지역</label><select id="city" class="control">
 <option value="126.9780">서울</option><option value="126.7052">인천</option><option value="127.3845">대전</option><option value="127.2890">세종</option><option value="126.8526">광주</option><option value="128.6014">대구</option><option value="129.0756">부산</option><option value="129.3114">울산</option><option value="126.5312">제주</option>
@@ -41,7 +41,9 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 <div class="result-card"><span class="real">실제 만세력 계산</span><h3>四柱 · 사주팔자</h3><div class="pillars"><div class="pillar"><small>시주</small><b id="hHanja">-</b><span id="hKor">-</span></div><div class="pillar"><small>일주</small><b id="dHanja">-</b><span id="dKor">-</span></div><div class="pillar"><small>월주</small><b id="mHanja">-</b><span id="mKor">-</span></div><div class="pillar"><small>년주</small><b id="yHanja">-</b><span id="yKor">-</span></div></div></div>
 <div class="result-card"><h3>🌿 오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>🪞 나를 나타내는 일간</h3><p id="dayMaster"></p></div>
-<div class="result-card"><h3>다음 V2 업데이트</h3><p>음력·윤달 입력 → 십성 → 대운·세운 → 해석 콘텐츠 순으로 확장할 예정입니다.</p></div>
+<div class="result-card"><h3>☯️ 십성</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
+<div class="result-card"><h3>🧭 대운 흐름</h3><p id="luckMeta"></p><div id="luckPillars"></div></div>
+<div class="result-card"><h3>다음 V2 업데이트</h3><p>세운과 해석 콘텐츠를 순서대로 확장할 예정입니다.</p></div>
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
 </main>
 <script type="module">
@@ -50,7 +52,9 @@ const stemEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':
 const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술':'토','축':'토','미':'토','신':'금','유':'금','해':'수','자':'수'};
 const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
 window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0)};
-let gender='';
+let gender='',isLunar=false,isLeapMonth=false;
+window.calendarPick=(el,val)=>{isLunar=val;document.querySelectorAll('.calendar').forEach(x=>x.classList.remove('on'));el.classList.add('on');document.getElementById('birthLabel').textContent=val?'음력 생년월일':'양력 생년월일';document.getElementById('leapField').style.display=val?'block':'none'};
+window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.calculate=()=>{
@@ -61,7 +65,7 @@ window.calculate=()=>{
  if(!gender){err.textContent='성별을 선택해주세요.';return}
  const [y,m,d]=birth.split('-').map(Number),longitude=Number(document.getElementById('city').value);showPage('loading');
  setTimeout(()=>{try{
-   const r=calculateFourPillars({year:y,month:m,day:d,hour:h,minute:mi,gender:gender==='남성'?'male':'female',trueSolarTime:{longitude,applyEquationOfTime:true,applyHistoricalDst:true},dayBoundary:'midnight'});
+   const r=calculateFourPillars({year:y,month:m,day:d,hour:h,minute:mi,gender:gender==='남성'?'male':'female',isLunar,isLeapMonth:isLunar?isLeapMonth:false,trueSolarTime:{longitude,applyEquationOfTime:true,applyHistoricalDst:true},dayBoundary:'midnight'});
    render(r);
  }catch(e){showPage('form');err.textContent='계산 중 오류가 발생했습니다. 날짜와 시간을 다시 확인해주세요.';console.error(e)}},650)
 };
@@ -75,6 +79,10 @@ function render(r){
  const stem=ko.day?.[0]||'';
  document.getElementById('dayMaster').textContent='일간은 '+stem+'('+(names[stem]||'')+')입니다. 일간은 사주에서 자신을 상징하는 중심 글자로 봅니다.';
  document.getElementById('summary').textContent=ko.year+'년 · '+ko.month+'월 · '+ko.day+'일 · '+ko.hour+'시';
+ const tg=r.tenGods||{}, order=[['시주','hour'],['일주','day'],['월주','month'],['년주','year']];
+ document.getElementById('tenGods').innerHTML='<div class="pillars">'+order.map(([label,key])=>{const v=tg[key]||{};return '<div class="pillar"><small>'+label+'</small><b style="font:700 13px sans-serif">'+(v.stem||'-')+'</b><span>'+(v.branch||'-')+'</span></div>'}).join('')+'</div>';
+ const luck=r.luckPillars;
+ if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+(luck.pillars||[]).map(x=>'<div class="pillar" style="min-width:72px"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></div>').join('')+'</div>'}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
  showPage('result')
 }
 </script></body></html>
