@@ -67,6 +67,29 @@ function luckRelations(branch, natal){
  const out=[]; Object.entries(branchRel).forEach(([type,pairs])=>natal.forEach(n=>{if(pairs.some(p=>pairHas(p,branch,n.branch)))out.push(type+' · '+branch+n.branch+' ('+n.label+')')}));
  return [...new Set(out)];
 }
+const tripleRel={삼합:[['신','자','진'],['해','묘','미'],['인','오','술'],['사','유','축']]};
+function tripleRelations(luckBranch,natal){
+ const all=natal.map(n=>n.branch).concat(luckBranch),out=[];
+ tripleRel.삼합.forEach(set=>{if(set.every(x=>all.includes(x)))out.push('삼합 · '+set.join(''))});
+ const has=(...xs)=>xs.every(x=>all.includes(x));
+ if(has('인','사','신'))out.push('삼형 · 인사신');
+ if(has('축','술','미'))out.push('삼형 · 축술미');
+ if(all.filter(x=>x==='자').length>=2)out.push('자형 · 자자');
+ if(all.filter(x=>x==='오').length>=2)out.push('자형 · 오오');
+ if(all.filter(x=>x==='유').length>=2)out.push('자형 · 유유');
+ if(all.filter(x=>x==='해').length>=2)out.push('자형 · 해해');
+ return [...new Set(out)];
+}
+function relationNarrative(rel){
+ if(!rel.length)return '원국과 이 대운 사이에서 이번 버전에 표시하는 주요 관계는 두드러지지 않습니다. 이는 좋고 나쁨을 뜻하지 않으며 다른 십성·세운 요소는 별도로 살펴야 합니다.';
+ const types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
+ let t='원국과 대운 사이에 '+types.join('·')+' 관계가 확인됩니다. ';
+ if(types.includes('삼합'))t+='세 지지가 한 묶음으로 갖춰지는 삼합은 특정 오행의 흐름이 강하게 연결되는 구조로 봅니다. ';
+ if(types.some(x=>x.includes('형')))t+='형은 압박·조정·반복 같은 긴장을 살피는 관계로 사용합니다. ';
+ if(types.includes('충'))t+='충은 서로 마주 보는 지지의 변화와 이동 가능성을 살피는 관계입니다. ';
+ if(types.includes('합'))t+='합은 두 지지가 서로 연결되는 관계를 뜻합니다. ';
+ return t+'관계 하나만으로 사건이나 길흉을 단정하지 않고 발생 위치와 전체 원국을 함께 해석합니다.';
+}
 function stemRelations(stem,natal){
  const out=[];natal.forEach(n=>{if(stemHap.some(p=>pairHas(p,stem,n.stem)))out.push('천간합 · '+stem+n.stem+' ('+n.label+')')});return out;
 }
@@ -75,8 +98,8 @@ window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').fo
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
- const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[])];
- document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간에 들어오는 '+p+'와 원국의 글자를 비교한 기본 관계입니다.</p>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p style="margin:10px 0 0">관계 표시는 길흉 판정이 아니라 원국과 대운 사이의 결합·변화·마찰 가능성을 확인하는 보조 정보입니다.</p>'};
+ const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
+ document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간에 들어오는 '+p+'와 원국의 글자를 비교한 기본 관계입니다.</p>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p style="margin:10px 0 0"><b>이 대운에서 읽는 포인트</b><br>'+relationNarrative(rel)+'</p>'};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
  const birth=document.getElementById('birth').value,h=Number(document.getElementById('hour').value),mi=Number(document.getElementById('minute').value);
