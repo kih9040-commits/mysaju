@@ -20,7 +20,7 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 .result-head{text-align:center;margin:5px 0 25px}.result-head small{color:var(--accent);font-weight:800}.result-head h2{margin:8px 0}.result-card{margin-bottom:12px}.result-card h3{margin:0 0 12px;font-size:17px}.result-card p{font-size:12px;color:var(--muted);line-height:1.7}
 .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.pillar{text-align:center;border:1px solid var(--line);border-radius:12px;padding:11px 3px}.pillar small{display:block;color:#999;font-size:10px}.pillar b{display:block;font:22px serif;margin:4px 0}.pillar span{font-size:10px;color:var(--muted)}
 .bar{display:grid;grid-template-columns:25px 1fr 25px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.track{height:8px;border-radius:9px;background:#eee7dc;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#b99a76,#74543d);border-radius:9px}
-.insight{margin-bottom:12px;padding:16px;border-radius:14px;background:#f3eadc;border:1px solid #e4d4bf}.insight b{display:block;margin-bottom:7px}.insight p{margin:0}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:11px;padding:7px 10px;border-radius:999px;background:#eee5d8;color:#665c51}.real{display:inline-block;font-size:10px;font-weight:800;color:#456c52;background:#e5efe5;border-radius:8px;padding:7px 9px;margin-bottom:12px}.error{color:#a34b3f;font-size:12px;margin-top:12px;line-height:1.5}
+.luck-detail{margin-top:12px;padding:15px;border-radius:14px;background:#f7f1e7;border:1px solid var(--line)}.luck-btn{cursor:pointer}.luck-btn.on{background:#eadfce;border-color:var(--accent)}.insight{margin-bottom:12px;padding:16px;border-radius:14px;background:#f3eadc;border:1px solid #e4d4bf}.insight b{display:block;margin-bottom:7px}.insight p{margin:0}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:11px;padding:7px 10px;border-radius:999px;background:#eee5d8;color:#665c51}.real{display:inline-block;font-size:10px;font-weight:800;color:#456c52;background:#e5efe5;border-radius:8px;padding:7px 9px;margin-bottom:12px}.error{color:#a34b3f;font-size:12px;margin-top:12px;line-height:1.5}
 </style>
 </head>
 <body><main class="app">
@@ -59,6 +59,7 @@ window.calendarPick=(el,val)=>{isLunar=val;document.querySelectorAll('.calendar'
 window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
+window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''));document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간은 '+p+' 기운이 들어오는 10년 흐름입니다. 현재는 대운의 기둥과 시작 시점을 정확히 보여주는 단계이며, 원국과의 합·충·형 및 십성 관계를 결합한 상세 대운 풀이는 다음 분석 단계에서 확장합니다.</p>'};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
  const birth=document.getElementById('birth').value,h=Number(document.getElementById('hour').value),mi=Number(document.getElementById('minute').value);
@@ -97,14 +98,18 @@ function render(r){
  const has=(...xs)=>tenLabels.some(x=>xs.includes(x));
  const wealth=has('편재','정재')?'재성 관계가 천간에 드러나 있어 현실적인 자원·성과·금전 관리의 주제가 눈에 띕니다. 다만 재성의 존재만으로 재물의 크기나 투자 성패를 판단할 수는 없습니다.':'천간에 재성이 강하게 드러난 구조는 아닙니다. 재물운은 지장간·대운과 전체 균형까지 함께 살펴야 합니다.';
  const work=has('정관','편관')?'관성 관계가 보여 책임, 규칙, 역할과 관련된 주제가 나타납니다. 조직생활이나 직업 성향은 관성의 강약과 다른 십성의 조합을 함께 봅니다.':has('식신','상관')?'식상 관계가 보여 표현, 기술, 생산성과 관련된 주제가 나타납니다. 실제 직업 적성은 전체 구조와 운의 흐름을 함께 봅니다.':'직업 성향은 한 가지 십성보다 전체 사주의 조합과 대운 흐름을 함께 보는 편이 적절합니다.';
- const relation=has('비견','겁재')?'비견·겁재 관계가 보여 또래·동료·경쟁과 협력의 주제가 나타납니다. 독립성과 관계의 균형이 중요한 해석 포인트가 될 수 있습니다.':'관계 성향은 일간과 다른 십성의 상호작용을 중심으로 추가 분석이 필요합니다.';
+ const relation=has('비견','겁재')?'비견·겁재가 함께 보여 자기 기준과 독립성이 분명한 편으로 읽힙니다. 사람들과 어울리면서도 주도권이나 방식이 맞지 않을 때 경쟁심이 생기기 쉬워, 역할과 경계를 분명히 할수록 관계가 편안해질 수 있습니다.':'관계에서는 일간의 성향과 다른 십성의 조합을 함께 살피는 것이 좋습니다.';
+ const love=has('정관','편관')?'관성이 드러나 관계에서 책임감, 약속, 상대에 대한 기준을 중요하게 보는 흐름이 나타납니다. 연애·결혼은 한 요소만으로 시기나 성패를 단정하지 않고 배우자궁과 운의 흐름을 함께 살펴야 합니다.':has('정재','편재')?'재성이 드러나 관계에서 현실감과 행동으로 마음을 표현하는 면을 살펴볼 수 있습니다. 다만 실제 인연의 시기와 결혼운은 전체 구조와 운의 흐름을 함께 봐야 합니다.':'연애와 결혼은 일지와 배우자궁, 전체 십성 및 운의 흐름을 함께 살펴야 하므로 현재 단계에서는 성향 중심으로 안내합니다.';
  document.getElementById('detailReading').innerHTML=
  '<div class="insight"><b>🌱 타고난 성향</b><p>'+(dayText[stem]||dm+' 일간을 중심으로 성향을 살펴봅니다.')+' 현재 팔자에서는 '+strongest[0]+' 기운이 상대적으로 많이 집계됩니다.</p></div>'+
  '<div class="insight"><b>💰 재물과 현실 감각</b><p>'+wealth+'</p></div>'+
  '<div class="insight"><b>💼 직업과 일</b><p>'+work+'</p></div>'+
- '<div class="insight"><b>🤝 인간관계</b><p>'+relation+'</p></div>'+
+ '<div class="insight"><b>💕 연애와 결혼</b><p>'+love+'</p></div>'+ '<div class="insight"><b>🤝 인간관계</b><p>'+relation+'</p></div>'+
  '<div class="insight"><b>⚖️ 오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 집계됩니다. 이 숫자는 표면의 여덟 글자를 센 값이며, 신강·신약·용신은 월령과 지장간 등 추가 조건 없이 확정하지 않습니다.</p></div>';
- if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+(luck.pillars||[]).map(x=>'<div class="pillar" style="min-width:72px"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></div>').join('')+'</div>'}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
+ if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';
+ const lp=luck.pillars||[];
+ document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+lp.map((x,i)=>'<button class="pillar luck-btn" style="min-width:72px;background:var(--paper)" onclick="showLuck('+i+',this)"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail">대운 카드를 누르면 해당 10년 흐름의 기본 정보를 볼 수 있습니다.</div>';
+ window._luck=lp;}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
  showPage('result')
 }
 </script></body></html>
