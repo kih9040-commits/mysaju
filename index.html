@@ -55,11 +55,28 @@ const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술
 const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
 window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0)};
 let gender='',isLunar=false,isLeapMonth=false;
+const branchRel={
+ 합:[['자','축'],['인','해'],['묘','술'],['진','유'],['사','신'],['오','미']],
+ 충:[['자','오'],['축','미'],['인','신'],['묘','유'],['진','술'],['사','해']],
+ 파:[['자','유'],['오','묘'],['인','해'],['사','신'],['진','축'],['술','미']],
+ 해:[['자','미'],['축','오'],['인','사'],['묘','진'],['신','해'],['유','술']]
+};
+const stemHap=[['갑','기'],['을','경'],['병','신'],['정','임'],['무','계']];
+function pairHas(pair,a,b){return pair.includes(a)&&pair.includes(b)}
+function luckRelations(branch, natal){
+ const out=[]; Object.entries(branchRel).forEach(([type,pairs])=>natal.forEach(n=>{if(pairs.some(p=>pairHas(p,branch,n.branch)))out.push(type+' · '+branch+n.branch+' ('+n.label+')')}));
+ return [...new Set(out)];
+}
+function stemRelations(stem,natal){
+ const out=[];natal.forEach(n=>{if(stemHap.some(p=>pairHas(p,stem,n.stem)))out.push('천간합 · '+stem+n.stem+' ('+n.label+')')});return out;
+}
 window.calendarPick=(el,val)=>{isLunar=val;document.querySelectorAll('.calendar').forEach(x=>x.classList.remove('on'));el.classList.add('on');document.getElementById('birthLabel').textContent=val?'음력 생년월일':'양력 생년월일';document.getElementById('leapField').style.display=val?'block':'none'};
 window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
-window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''));document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간은 '+p+' 기운이 들어오는 10년 흐름입니다. 현재는 대운의 기둥과 시작 시점을 정확히 보여주는 단계이며, 원국과의 합·충·형 및 십성 관계를 결합한 상세 대운 풀이는 다음 분석 단계에서 확장합니다.</p>'};
+window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
+ const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[])];
+ document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간에 들어오는 '+p+'와 원국의 글자를 비교한 기본 관계입니다.</p>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p style="margin:10px 0 0">관계 표시는 길흉 판정이 아니라 원국과 대운 사이의 결합·변화·마찰 가능성을 확인하는 보조 정보입니다.</p>'};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
  const birth=document.getElementById('birth').value,h=Number(document.getElementById('hour').value),mi=Number(document.getElementById('minute').value);
@@ -74,6 +91,7 @@ window.calculate=()=>{
 };
 function render(r){
  const ko=r.toObject();
+ window._natal=[{label:'년지',stem:ko.year[0],branch:ko.year[1]},{label:'월지',stem:ko.month[0],branch:ko.month[1]},{label:'일지',stem:ko.day[0],branch:ko.day[1]},{label:'시지',stem:ko.hour[0],branch:ko.hour[1]}];
  const han={year:r.yearHanja,month:r.monthHanja,day:r.dayHanja,hour:r.hourHanja};
  document.getElementById('rname').textContent=document.getElementById('name').value.trim()||'당신';
  [['y',han.year,ko.year],['m',han.month,ko.month],['d',han.day,ko.day],['h',han.hour,ko.hour]].forEach(([id,h,k])=>{document.getElementById(id+'Hanja').textContent=h;document.getElementById(id+'Kor').textContent=k});
