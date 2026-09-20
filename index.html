@@ -143,7 +143,7 @@ function relationNarrative(rel){
 function stemRelations(stem,natal){
  const out=[];natal.forEach(n=>{if(stemHap.some(p=>pairHas(p,stem,n.stem)))out.push('천간합 · '+stem+n.stem+' ('+n.label+')')});return out;
 }
-function daysInBirthMonth(y,m){if(isLunar)return 30;return new Date(y,m,0).getDate()}
+function daysInBirthMonth(y,m){return 31}
 function syncBirth(){
  const y=Number(document.getElementById('birthYear').value),m=Number(document.getElementById('birthMonth').value),dsel=document.getElementById('birthDay'),old=Number(dsel.value)||1,max=daysInBirthMonth(y,m);
  dsel.innerHTML=Array.from({length:max},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'일</option>').join('');dsel.value=String(Math.min(old,max));
@@ -151,7 +151,7 @@ function syncBirth(){
 }
 function initBirthSelects(){
  const y=document.getElementById('birthYear'),m=document.getElementById('birthMonth');
- y.innerHTML='<option value="">년도</option>'+Array.from({length:151},(_,i)=>2050-i).map(v=>'<option value="'+v+'">'+v+'년</option>').join('');
+ y.innerHTML='<option value="">년도</option>'+Array.from({length:131},(_,i)=>2030-i).map(v=>'<option value="'+v+'">'+v+'년</option>').join('');
  m.innerHTML='<option value="">월</option>'+Array.from({length:12},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'월</option>').join('');
  [y,m].forEach(x=>x.addEventListener('change',()=>{if(y.value&&m.value)syncBirth()}));
  document.getElementById('birthDay').addEventListener('change',()=>{if(y.value&&m.value)syncBirth()});
