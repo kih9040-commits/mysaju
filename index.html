@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#f7f2e8"><title>사주로움 V2</title>
+<meta name="theme-color" content="#f7f2e8"><title>사주로움 | 나를 알아가는 새로운 사주</title>
 <style>
 :root{--bg:#f7f2e8;--paper:#fffdf8;--ink:#28241f;--muted:#7d756b;--line:#e5dacb;--accent:#805c43;--dark:#2d2924}
 *{box-sizing:border-box}body{margin:0;background:#eee9df;color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Pretendard","Noto Sans KR",sans-serif}
@@ -21,11 +21,22 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.pillar{text-align:center;border:1px solid var(--line);border-radius:12px;padding:11px 3px}.pillar small{display:block;color:#999;font-size:10px}.pillar b{display:block;font:22px serif;margin:4px 0}.pillar span{font-size:10px;color:var(--muted)}
 .bar{display:grid;grid-template-columns:25px 1fr 25px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.track{height:8px;border-radius:9px;background:#eee7dc;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#b99a76,#74543d);border-radius:9px}
 .luck-detail{margin-top:12px;padding:15px;border-radius:14px;background:#f7f1e7;border:1px solid var(--line)}.luck-btn{cursor:pointer}.luck-btn.on{background:#eadfce;border-color:var(--accent)}.insight{margin-bottom:12px;padding:16px;border-radius:14px;background:#f3eadc;border:1px solid #e4d4bf}.insight b{display:block;margin-bottom:7px}.insight p{margin:0}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:11px;padding:7px 10px;border-radius:999px;background:#eee5d8;color:#665c51}.real{display:inline-block;font-size:10px;font-weight:800;color:#456c52;background:#e5efe5;border-radius:8px;padding:7px 9px;margin-bottom:12px}.error{color:#a34b3f;font-size:12px;margin-top:12px;line-height:1.5}
+
+/* SAJUROUM service polish */
+body{background:radial-gradient(circle at 50% 0,#f6f0e5 0,#e9e4da 58%,#e5dfd5 100%)}
+.app{background:linear-gradient(180deg,#fbf7ef 0,#f7f1e7 100%);box-shadow:0 18px 70px #493b2d18}
+header{height:72px;background:#fbf7efdd;backdrop-filter:blur(14px);position:sticky;top:0;z-index:20;border-bottom:1px solid #b99a7622}.logo{letter-spacing:-1px}.logo b{font-weight:900}header small{font-size:10px;letter-spacing:-.2px}
+.page{padding:34px 22px 64px}.home{padding-top:62px}.seal{width:116px;height:116px;border:1px solid #c9aa83;background:radial-gradient(circle,#fffdf8 0,#f6ecdc 100%);box-shadow:0 18px 45px #76563c1a,inset 0 0 0 7px #fffaf2}
+h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:18px;padding:19px;background:linear-gradient(135deg,#302b26,#1f1c19);box-shadow:0 10px 25px #2d29241c;transition:.18s}.primary:active{transform:scale(.985)}
+.features{gap:12px}.card,.result-card{border-color:#e7dac9;background:#fffdf9;box-shadow:0 8px 25px #60472e0a}.card{padding:19px;border-radius:20px}.result-card{padding:19px;border-radius:21px;margin-bottom:14px}.result-card h3{font-size:18px;letter-spacing:-.5px}
+.control,.choice{border-color:#dfd2c1;background:#fffdfa}.control:focus{box-shadow:0 0 0 3px #805c4312}.choice.on{background:#eee1cf;box-shadow:inset 0 0 0 1px #805c43}
+.result-head{padding:13px 0 8px}.result-head small{letter-spacing:1.5px;font-size:10px}.result-head h2{font-size:30px}.pillars{gap:8px}.pillar{background:#fffaf3;border-color:#e5d5c1;padding:13px 3px}.pillar b{font-size:24px}.luck-btn{transition:.15s}.luck-btn.on{box-shadow:inset 0 0 0 1px #805c43}.luck-detail{background:#f8f1e6}.insight{background:#f6ede0}.real{letter-spacing:.2px}
+@media(max-width:420px){header{padding:0 18px}header small{max-width:145px;text-align:right}.page{padding-left:18px;padding-right:18px}h1{font-size:32px}.result-card{padding:16px}.pillar b{font-size:21px}}
 </style>
 </head>
 <body><main class="app">
 <header><div class="logo">사주<b>로움</b></div><small>나를 알아가는 새로운 사주</small></header>
-<section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">V2에서는 입력한 생년월일과 출생시간으로<br>실제 만세력의 네 기둥을 계산합니다.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">V2 · 정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card">☯️<b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card">🌿<b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card">🧭<b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card">✨<b>확장 준비</b><span>십성·대운·세운은 다음 버전에서 연결</span></div></div></section>
+<section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">태어난 시간과 계절의 흐름을 따라<br>나의 기질과 삶의 방향을 차분히 살펴보세요.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card">☯️<b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card">🌿<b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card">🧭<b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card">✨<b>십성·대운</b><span>나와 주변의 관계, 삶의 큰 흐름을 확인</span></div></div></section>
 <section id="form" class="page"><button class="back" onclick="showPage('home')">← 돌아가기</button><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">양력 또는 음력 생년월일을 선택해 계산합니다.</p><div class="field"><label>생일 기준</label><div class="choicegrid"><button class="choice calendar on" onclick="calendarPick(this,false)">양력</button><button class="choice calendar" onclick="calendarPick(this,true)">음력</button></div></div>
 <div class="field"><label>이름 또는 별명</label><input id="name" class="control" placeholder="예: 로움"></div>
 <div class="field"><label id="birthLabel">양력 생년월일</label><input id="birth" class="control" type="date" min="1900-01-01" max="2050-12-31"></div><div id="leapField" class="field" style="display:none"><label>음력 윤달 여부</label><div class="choicegrid"><button class="choice leap on" onclick="leapPick(this,false)">평달</button><button class="choice leap" onclick="leapPick(this,true)">윤달</button></div></div>
@@ -37,7 +48,7 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 <div class="note">🔒 입력값은 이 V2 화면에서 계산에만 사용하며 별도 서버에 저장하지 않습니다.<br>※ 선택한 출생지역의 경도와 균시차, 한국의 과거 표준시·서머타임을 반영하는 진태양시 보정을 사용합니다.</div>
 <button class="primary" id="calcBtn" onclick="calculate()">실제 사주팔자 계산하기</button><div id="formError" class="error"></div></section>
 <section id="loading" class="page"><div class="loading"><div><div class="orbit">命</div><h2>사주팔자를 계산하는 중</h2><p class="desc">절기 기준의 년주·월주와<br>일주·시주를 확인하고 있어요.</p></div></div></section>
-<section id="result" class="page"><button class="back" onclick="showPage('form')">← 다시 입력하기</button><div class="result-head"><small>SAJUROUM V2</small><h2><span id="rname">당신</span>님의 사주</h2><p class="desc" id="summary"></p></div>
+<section id="result" class="page"><button class="back" onclick="showPage('form')">← 다시 입력하기</button><div class="result-head"><small>SAJUROUM · 四柱</small><h2><span id="rname">당신</span>님의 사주</h2><p class="desc" id="summary"></p></div>
 <div class="result-card"><span class="real">실제 만세력 계산</span><h3>四柱 · 사주팔자</h3><div class="pillars"><div class="pillar"><small>시주</small><b id="hHanja">-</b><span id="hKor">-</span></div><div class="pillar"><small>일주</small><b id="dHanja">-</b><span id="dKor">-</span></div><div class="pillar"><small>월주</small><b id="mHanja">-</b><span id="mKor">-</span></div><div class="pillar"><small>년주</small><b id="yHanja">-</b><span id="yKor">-</span></div></div></div>
 <div class="result-card"><h3>✨ 사주 핵심 요약</h3><div id="coreSummary"></div></div>
 <div class="result-card"><h3>🌿 오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
@@ -45,7 +56,7 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 <div class="result-card"><h3>☯️ 십성</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
 <div class="result-card"><h3>🧭 대운 흐름</h3><p id="luckMeta"></p><div id="luckPillars"></div></div>
 <div class="result-card"><h3>📖 상세 풀이</h3><div id="detailReading"></div><p style="margin-top:12px">※ 전통 명리 해석의 일반적인 관점에 따른 참고용 설명이며, 중요한 의사결정을 대신하지 않습니다.</p></div>
-<div class="result-card"><h3>다음 V2 업데이트</h3><p>세운·연도별 흐름과 더 깊은 맞춤 해석으로 확장할 예정입니다.</p></div>
+
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
 </main>
 <script type="module">
