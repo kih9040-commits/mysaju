@@ -66,12 +66,8 @@ window.calculate=()=>{
  }catch(e){showPage('form');err.textContent='계산 중 오류가 발생했습니다. 날짜와 시간을 다시 확인해주세요.';console.error(e)}},650)
 };
 function render(r){
- const ko=r.toObject(), rawHan=r.toHanjaObject();
- const han={};
- for(const key of ['year','month','day','hour']){
-   const p=rawHan[key];
-   han[key]=typeof p==='string' ? p : (p?.heavenlyStem||'')+(p?.earthlyBranch||'');
- }
+ const ko=r.toObject();
+ const han={year:r.yearHanja,month:r.monthHanja,day:r.dayHanja,hour:r.hourHanja};
  document.getElementById('rname').textContent=document.getElementById('name').value.trim()||'당신';
  [['y',han.year,ko.year],['m',han.month,ko.month],['d',han.day,ko.day],['h',han.hour,ko.hour]].forEach(([id,h,k])=>{document.getElementById(id+'Hanja').textContent=h;document.getElementById(id+'Kor').textContent=k});
  const counts=countElements(ko),max=8;
