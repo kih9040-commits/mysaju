@@ -20,7 +20,7 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 .result-head{text-align:center;margin:5px 0 25px}.result-head small{color:var(--accent);font-weight:800}.result-head h2{margin:8px 0}.result-card{margin-bottom:12px}.result-card h3{margin:0 0 12px;font-size:17px}.result-card p{font-size:12px;color:var(--muted);line-height:1.7}
 .pillars{display:grid;grid-template-columns:repeat(4,1fr);gap:7px}.pillar{text-align:center;border:1px solid var(--line);border-radius:12px;padding:11px 3px}.pillar small{display:block;color:#999;font-size:10px}.pillar b{display:block;font:22px serif;margin:4px 0}.pillar span{font-size:10px;color:var(--muted)}
 .bar{display:grid;grid-template-columns:25px 1fr 25px;gap:8px;align-items:center;margin:10px 0;font-size:12px}.track{height:8px;border-radius:9px;background:#eee7dc;overflow:hidden}.fill{height:100%;background:linear-gradient(90deg,#b99a76,#74543d);border-radius:9px}
-.real{display:inline-block;font-size:10px;font-weight:800;color:#456c52;background:#e5efe5;border-radius:8px;padding:7px 9px;margin-bottom:12px}.error{color:#a34b3f;font-size:12px;margin-top:12px;line-height:1.5}
+.insight{margin-bottom:12px;padding:16px;border-radius:14px;background:#f3eadc;border:1px solid #e4d4bf}.insight b{display:block;margin-bottom:7px}.insight p{margin:0}.tags{display:flex;flex-wrap:wrap;gap:7px;margin-top:10px}.tag{font-size:11px;padding:7px 10px;border-radius:999px;background:#eee5d8;color:#665c51}.real{display:inline-block;font-size:10px;font-weight:800;color:#456c52;background:#e5efe5;border-radius:8px;padding:7px 9px;margin-bottom:12px}.error{color:#a34b3f;font-size:12px;margin-top:12px;line-height:1.5}
 </style>
 </head>
 <body><main class="app">
@@ -39,11 +39,13 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 <section id="loading" class="page"><div class="loading"><div><div class="orbit">命</div><h2>사주팔자를 계산하는 중</h2><p class="desc">절기 기준의 년주·월주와<br>일주·시주를 확인하고 있어요.</p></div></div></section>
 <section id="result" class="page"><button class="back" onclick="showPage('form')">← 다시 입력하기</button><div class="result-head"><small>SAJUROUM V2</small><h2><span id="rname">당신</span>님의 사주</h2><p class="desc" id="summary"></p></div>
 <div class="result-card"><span class="real">실제 만세력 계산</span><h3>四柱 · 사주팔자</h3><div class="pillars"><div class="pillar"><small>시주</small><b id="hHanja">-</b><span id="hKor">-</span></div><div class="pillar"><small>일주</small><b id="dHanja">-</b><span id="dKor">-</span></div><div class="pillar"><small>월주</small><b id="mHanja">-</b><span id="mKor">-</span></div><div class="pillar"><small>년주</small><b id="yHanja">-</b><span id="yKor">-</span></div></div></div>
+<div class="result-card"><h3>✨ 사주 핵심 요약</h3><div id="coreSummary"></div></div>
 <div class="result-card"><h3>🌿 오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>🪞 나를 나타내는 일간</h3><p id="dayMaster"></p></div>
 <div class="result-card"><h3>☯️ 십성</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
 <div class="result-card"><h3>🧭 대운 흐름</h3><p id="luckMeta"></p><div id="luckPillars"></div></div>
-<div class="result-card"><h3>다음 V2 업데이트</h3><p>세운과 해석 콘텐츠를 순서대로 확장할 예정입니다.</p></div>
+<div class="result-card"><h3>📖 상세 풀이</h3><div id="detailReading"></div><p style="margin-top:12px">※ 전통 명리 해석의 일반적인 관점에 따른 참고용 설명이며, 중요한 의사결정을 대신하지 않습니다.</p></div>
+<div class="result-card"><h3>다음 V2 업데이트</h3><p>세운·연도별 흐름과 더 깊은 맞춤 해석으로 확장할 예정입니다.</p></div>
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
 </main>
 <script type="module">
@@ -78,10 +80,14 @@ function render(r){
  document.getElementById('bars').innerHTML=Object.entries(counts).map(([k,v])=>'<div class="bar"><b>'+k+'</b><div class="track"><div class="fill" style="width:'+(v/max*100)+'%"></div></div><span>'+v+'</span></div>').join('');
  const stem=ko.day?.[0]||'';
  document.getElementById('dayMaster').textContent='일간은 '+stem+'('+(names[stem]||'')+')입니다. 일간은 사주에서 자신을 상징하는 중심 글자로 봅니다.';
+ const dm=names[stem]||stem, strongest=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0], weakest=Object.entries(counts).sort((a,b)=>a[1]-b[1])[0];
+ document.getElementById('coreSummary').innerHTML='<div class="insight"><b>'+dm+' 일간을 중심으로 보는 사주</b><p>현재 단순 오행 개수 기준으로 <strong>'+strongest[0]+'</strong> 기운이 가장 많이 드러나고, <strong>'+weakest[0]+'</strong> 기운은 상대적으로 적습니다. 아래 십성과 대운을 함께 보며 전체 구조를 확인합니다.</p><div class="tags"><span class="tag">일간 '+dm+'</span><span class="tag">강조 '+strongest[0]+' '+strongest[1]+'</span><span class="tag">부족 '+weakest[0]+' '+weakest[1]+'</span></div></div>';
  document.getElementById('summary').textContent=ko.year+'년 · '+ko.month+'월 · '+ko.day+'일 · '+ko.hour+'시';
  const tg=r.tenGods||{}, order=[['시주','hour'],['일주','day'],['월주','month'],['년주','year']];
  document.getElementById('tenGods').innerHTML='<div class="pillars">'+order.map(([label,key])=>{const v=tg[key]||{};return '<div class="pillar"><small>'+label+'</small><b style="font:700 13px sans-serif">'+(v.stem||'-')+'</b><span>'+(v.branch||'-')+'</span></div>'}).join('')+'</div>';
  const luck=r.luckPillars;
+ const tenLabels=order.map(([label,key])=>tg[key]?.stem).filter(Boolean).filter(x=>x!=='일간');
+ document.getElementById('detailReading').innerHTML='<div class="insight"><b>성향의 실마리</b><p>'+dm+'의 특성을 중심에 두고 '+(tenLabels.length?tenLabels.join('·'):'십성')+' 관계가 함께 나타납니다. 십성은 좋고 나쁨을 단정하는 점수가 아니라 관계와 역할의 경향을 읽는 기준입니다.</p></div><div class="insight"><b>오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 계산되었습니다. 개수만으로 신강·신약이나 용신을 확정하지 않고 계절·월령 등 추가 조건과 함께 해석해야 합니다.</p></div>';
  if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+(luck.pillars||[]).map(x=>'<div class="pillar" style="min-width:72px"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></div>').join('')+'</div>'}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
  showPage('result')
 }
