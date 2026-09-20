@@ -49,6 +49,9 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 
 /* Result readability pass */
 .result-page .result-card{padding:20px}.result-page .result-card p{font-size:12.5px;line-height:1.75}.result-page .section-kicker{margin-bottom:11px}.result-page .pillar-card .pillars{gap:9px}.result-page .pillar-card .pillar{min-height:86px;display:flex;flex-direction:column;justify-content:center}.result-page .summary-card #coreSummary{margin-top:4px}.result-page .summary-card .insight{padding:18px}.result-page .track{height:9px}.result-page .luck-card .luck-detail{font-size:12px;line-height:1.7}.result-page .luck-card #luckPillars>div:first-child{padding:2px 0 8px}.result-page .luck-card .luck-btn{min-width:78px!important;padding-top:13px;padding-bottom:13px}.result-page .luck-card .luck-btn b{font-size:21px}.result-page .detail-card{margin-top:2px}
+
+/* Unknown birth-time safety */
+.unknown-time{display:flex!important;align-items:center;gap:8px;margin:12px 2px 0!important;font-size:11px!important;font-weight:600!important;color:#665c51}.unknown-time input{accent-color:#805c43}.time-help{font-size:10px!important;line-height:1.55!important;margin:7px 2px 0!important;color:#978b7e!important}.disabled-time{opacity:.45}.disabled-time .control{cursor:not-allowed}
 </style>
 </head>
 <body><main class="app">
@@ -57,7 +60,7 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 <section id="form" class="page form-page"><button class="back" onclick="showPage('home')">← 돌아가기</button><div class="form-intro"><span class="step-badge">BIRTH INFO</span><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">정확한 사주 계산을 위해 아래 정보를 입력해주세요.</p></div><div class="field"><label>생일 기준</label><div class="choicegrid"><button class="choice calendar on" onclick="calendarPick(this,false)">양력</button><button class="choice calendar" onclick="calendarPick(this,true)">음력</button></div></div>
 <div class="field"><label>이름 또는 별명</label><input id="name" class="control" placeholder="예: 로움"></div>
 <div class="field"><label id="birthLabel">양력 생년월일</label><input id="birth" class="control" type="date" min="1900-01-01" max="2050-12-31"></div><div id="leapField" class="field" style="display:none"><label>음력 윤달 여부</label><div class="choicegrid"><button class="choice leap on" onclick="leapPick(this,false)">평달</button><button class="choice leap" onclick="leapPick(this,true)">윤달</button></div></div>
-<div class="field"><label>태어난 시각</label><div class="timegrid"><input id="hour" class="control" type="number" min="0" max="23" placeholder="시 (0~23)"><input id="minute" class="control" type="number" min="0" max="59" placeholder="분 (0~59)"></div></div>
+<div class="field"><label>태어난 시각</label><div id="timeInputs" class="timegrid"><input id="hour" class="control" type="number" min="0" max="23" placeholder="시 (0~23)"><input id="minute" class="control" type="number" min="0" max="59" placeholder="분 (0~59)"></div><label class="unknown-time"><input id="unknownTime" type="checkbox" onchange="toggleUnknownTime(this.checked)"> 출생시간을 잘 모르겠어요</label><p class="time-help">시간을 모르면 시주가 달라질 수 있어 정확한 사주팔자는 확정할 수 없습니다.</p></div>
 <div class="field"><label>출생지역</label><select id="city" class="control">
 <option value="126.9780">서울</option><option value="126.7052">인천</option><option value="127.3845">대전</option><option value="127.2890">세종</option><option value="126.8526">광주</option><option value="128.6014">대구</option><option value="129.0756">부산</option><option value="129.3114">울산</option><option value="126.5312">제주</option>
 </select></div>
@@ -82,7 +85,7 @@ const stemEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':
 const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술':'토','축':'토','미':'토','신':'금','유':'금','해':'수','자':'수'};
 const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
 window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0)};
-let gender='',isLunar=false,isLeapMonth=false;
+let gender='',isLunar=false,isLeapMonth=false,unknownTime=false;
 const branchRel={
  합:[['자','축'],['인','해'],['묘','술'],['진','유'],['사','신'],['오','미']],
  충:[['자','오'],['축','미'],['인','신'],['묘','유'],['진','술'],['사','해']],
@@ -129,10 +132,12 @@ function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o)
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
  const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
  document.getElementById('luckDetail').innerHTML='<b>'+x.age+'세부터의 대운 · '+p+'</b><p style="margin:7px 0 0">이 구간에 들어오는 '+p+'와 원국의 글자를 비교한 기본 관계입니다.</p>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p style="margin:10px 0 0"><b>이 대운에서 읽는 포인트</b><br>'+relationNarrative(rel)+'</p>'};
+window.toggleUnknownTime=val=>{unknownTime=val;const box=document.getElementById('timeInputs');box.classList.toggle('disabled-time',val);['hour','minute'].forEach(id=>{const el=document.getElementById(id);el.disabled=val;if(val)el.value=''});};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
  const birth=document.getElementById('birth').value,h=Number(document.getElementById('hour').value),mi=Number(document.getElementById('minute').value);
  if(!birth){err.textContent='생년월일을 입력해주세요.';return}
+ if(unknownTime){err.textContent='출생시간을 모르는 경우에는 시주를 임의로 계산하지 않습니다. 정확한 출생시간을 확인한 뒤 입력해주세요.';return}
  if(document.getElementById('hour').value===''||h<0||h>23||document.getElementById('minute').value===''||mi<0||mi>59){err.textContent='태어난 시각을 시·분까지 입력해주세요.';return}
  if(!gender){err.textContent='성별을 선택해주세요.';return}
  const [y,m,d]=birth.split('-').map(Number),longitude=Number(document.getElementById('city').value);showPage('loading');
