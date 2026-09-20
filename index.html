@@ -25,43 +25,55 @@ h1{font-size:34px;line-height:1.3;letter-spacing:-2px;margin:0 0 15px}h1 em{font
 </head>
 <body><main class="app">
 <header><div class="logo">사주<b>로움</b></div><small>나를 알아가는 새로운 사주</small></header>
-<section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">V2에서는 입력한 생년월일과 출생시간으로<br>실제 만세력의 네 기둥을 계산합니다.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">V2 · 양력 / 한국 표준시 기준 계산</div><div class="features"><div class="card">☯️<b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card">🌿<b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card">🧭<b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card">✨<b>확장 준비</b><span>십성·대운·세운은 다음 버전에서 연결</span></div></div></section>
+<section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">V2에서는 입력한 생년월일과 출생시간으로<br>실제 만세력의 네 기둥을 계산합니다.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">V2 · 정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card">☯️<b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card">🌿<b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card">🧭<b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card">✨<b>확장 준비</b><span>십성·대운·세운은 다음 버전에서 연결</span></div></div></section>
 <section id="form" class="page"><button class="back" onclick="showPage('home')">← 돌아가기</button><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">현재 V2 1차 버전은 양력 생일을 기준으로 계산합니다.</p>
 <div class="field"><label>이름 또는 별명</label><input id="name" class="control" placeholder="예: 로움"></div>
 <div class="field"><label>양력 생년월일</label><input id="birth" class="control" type="date" min="1900-01-01" max="2050-12-31"></div>
 <div class="field"><label>태어난 시각</label><div class="timegrid"><input id="hour" class="control" type="number" min="0" max="23" placeholder="시 (0~23)"><input id="minute" class="control" type="number" min="0" max="59" placeholder="분 (0~59)"></div></div>
+<div class="field"><label>출생지역</label><select id="city" class="control">
+<option value="126.9780">서울</option><option value="126.7052">인천</option><option value="127.3845">대전</option><option value="127.2890">세종</option><option value="126.8526">광주</option><option value="128.6014">대구</option><option value="129.0756">부산</option><option value="129.3114">울산</option><option value="126.5312">제주</option>
+</select></div>
 <div class="field"><label>성별</label><div class="choicegrid"><button class="choice gender" onclick="genderPick(this,'남성')">남성</button><button class="choice gender" onclick="genderPick(this,'여성')">여성</button></div></div>
-<div class="note">🔒 입력값은 이 V2 화면에서 계산에만 사용하며 별도 서버에 저장하지 않습니다.<br>※ 이번 버전은 출생지 경도 보정 전의 한국 표준시 기준입니다. 출생지 보정은 다음 단계에서 추가합니다.</div>
+<div class="note">🔒 입력값은 이 V2 화면에서 계산에만 사용하며 별도 서버에 저장하지 않습니다.<br>※ 선택한 출생지역의 경도와 균시차, 한국의 과거 표준시·서머타임을 반영하는 진태양시 보정을 사용합니다.</div>
 <button class="primary" id="calcBtn" onclick="calculate()">실제 사주팔자 계산하기</button><div id="formError" class="error"></div></section>
 <section id="loading" class="page"><div class="loading"><div><div class="orbit">命</div><h2>사주팔자를 계산하는 중</h2><p class="desc">절기 기준의 년주·월주와<br>일주·시주를 확인하고 있어요.</p></div></div></section>
 <section id="result" class="page"><button class="back" onclick="showPage('form')">← 다시 입력하기</button><div class="result-head"><small>SAJUROUM V2</small><h2><span id="rname">당신</span>님의 사주</h2><p class="desc" id="summary"></p></div>
 <div class="result-card"><span class="real">실제 만세력 계산</span><h3>四柱 · 사주팔자</h3><div class="pillars"><div class="pillar"><small>시주</small><b id="hHanja">-</b><span id="hKor">-</span></div><div class="pillar"><small>일주</small><b id="dHanja">-</b><span id="dKor">-</span></div><div class="pillar"><small>월주</small><b id="mHanja">-</b><span id="mKor">-</span></div><div class="pillar"><small>년주</small><b id="yHanja">-</b><span id="yKor">-</span></div></div></div>
 <div class="result-card"><h3>🌿 오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>🪞 나를 나타내는 일간</h3><p id="dayMaster"></p></div>
-<div class="result-card"><h3>다음 V2 업데이트</h3><p>출생지에 따른 진태양시 보정 → 음력·윤달 입력 → 십성 → 대운·세운 → 해석 콘텐츠 순으로 확장할 예정입니다.</p></div>
+<div class="result-card"><h3>다음 V2 업데이트</h3><p>음력·윤달 입력 → 십성 → 대운·세운 → 해석 콘텐츠 순으로 확장할 예정입니다.</p></div>
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
 </main>
 <script type="module">
-import { calculateSajuSimple } from 'https://esm.sh/@fullstackfamily/manseryeok@1.0.8';
-const stemEl={'甲':'목','乙':'목','丙':'화','丁':'화','戊':'토','己':'토','庚':'금','辛':'금','壬':'수','癸':'수'};
-const branchEl={'寅':'목','卯':'목','巳':'화','午':'화','辰':'토','戌':'토','丑':'토','未':'토','申':'금','酉':'금','亥':'수','子':'수'};
-const names={'甲':'갑목','乙':'을목','丙':'병화','丁':'정화','戊':'무토','己':'기토','庚':'경금','辛':'신금','壬':'임수','癸':'계수'};
+import { calculateFourPillars } from 'https://esm.sh/manseryeok@2.0.0';
+const stemEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':'토','경':'금','신':'금','임':'수','계':'수'};
+const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술':'토','축':'토','미':'토','신':'금','유':'금','해':'수','자':'수'};
+const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
 window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0)};
 let gender='';
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
-function countElements(saju){let c={목:0,화:0,토:0,금:0,수:0};[saju.yearPillarHanja,saju.monthPillarHanja,saju.dayPillarHanja,saju.hourPillarHanja].join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
+function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
  const birth=document.getElementById('birth').value,h=Number(document.getElementById('hour').value),mi=Number(document.getElementById('minute').value);
- if(!birth){err.textContent='생년월일을 입력해주세요.';return}if(document.getElementById('hour').value===''||h<0||h>23||document.getElementById('minute').value===''||mi<0||mi>59){err.textContent='태어난 시각을 시·분까지 입력해주세요.';return}if(!gender){err.textContent='성별을 선택해주세요.';return}
- const [y,m,d]=birth.split('-').map(Number);showPage('loading');
- setTimeout(()=>{try{const s=calculateSajuSimple(y,m,d,h,mi);render(s)}catch(e){showPage('form');err.textContent='계산 중 오류가 발생했습니다. 입력 날짜가 1900~2050년 범위인지 확인해주세요.';console.error(e)}},650)
+ if(!birth){err.textContent='생년월일을 입력해주세요.';return}
+ if(document.getElementById('hour').value===''||h<0||h>23||document.getElementById('minute').value===''||mi<0||mi>59){err.textContent='태어난 시각을 시·분까지 입력해주세요.';return}
+ if(!gender){err.textContent='성별을 선택해주세요.';return}
+ const [y,m,d]=birth.split('-').map(Number),longitude=Number(document.getElementById('city').value);showPage('loading');
+ setTimeout(()=>{try{
+   const r=calculateFourPillars({year:y,month:m,day:d,hour:h,minute:mi,gender:gender==='남성'?'male':'female',trueSolarTime:{longitude,applyEquationOfTime:true,applyHistoricalDst:true},dayBoundary:'midnight'});
+   render(r);
+ }catch(e){showPage('form');err.textContent='계산 중 오류가 발생했습니다. 날짜와 시간을 다시 확인해주세요.';console.error(e)}},650)
 };
-function render(s){
+function render(r){
+ const ko=r.toObject(), han=r.toHanjaObject();
  document.getElementById('rname').textContent=document.getElementById('name').value.trim()||'당신';
- [['y',s.yearPillarHanja,s.yearPillar],['m',s.monthPillarHanja,s.monthPillar],['d',s.dayPillarHanja,s.dayPillar],['h',s.hourPillarHanja,s.hourPillar]].forEach(([id,han,kor])=>{document.getElementById(id+'Hanja').textContent=han;document.getElementById(id+'Kor').textContent=kor});
- const counts=countElements(s), max=8;document.getElementById('bars').innerHTML=Object.entries(counts).map(([k,v])=>'<div class="bar"><b>'+k+'</b><div class="track"><div class="fill" style="width:'+(v/max*100)+'%"></div></div><span>'+v+'</span></div>').join('');
- const stem=s.dayPillarHanja?.[0]||'';document.getElementById('dayMaster').textContent='일간은 '+stem+'('+ (names[stem]||'') +')입니다. 일간은 사주에서 자신을 상징하는 중심 글자로 봅니다.';
- document.getElementById('summary').textContent=s.yearPillar+'년 · '+s.monthPillar+'월 · '+s.dayPillar+'일 · '+s.hourPillar+'시';showPage('result')
+ [['y',han.year,ko.year],['m',han.month,ko.month],['d',han.day,ko.day],['h',han.hour,ko.hour]].forEach(([id,h,k])=>{document.getElementById(id+'Hanja').textContent=h;document.getElementById(id+'Kor').textContent=k});
+ const counts=countElements(ko),max=8;
+ document.getElementById('bars').innerHTML=Object.entries(counts).map(([k,v])=>'<div class="bar"><b>'+k+'</b><div class="track"><div class="fill" style="width:'+(v/max*100)+'%"></div></div><span>'+v+'</span></div>').join('');
+ const stem=ko.day?.[0]||'';
+ document.getElementById('dayMaster').textContent='일간은 '+stem+'('+(names[stem]||'')+')입니다. 일간은 사주에서 자신을 상징하는 중심 글자로 봅니다.';
+ document.getElementById('summary').textContent=ko.year+'년 · '+ko.month+'월 · '+ko.day+'일 · '+ko.hour+'시';
+ showPage('result')
 }
 </script></body></html>
