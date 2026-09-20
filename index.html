@@ -148,7 +148,7 @@ function render(r){
  '<div class="insight"><b>💼 직업과 일</b><p>'+work+'</p></div>'+
  '<div class="insight"><b>💕 연애와 결혼</b><p>'+love+'</p></div>'+ '<div class="insight"><b>🤝 인간관계</b><p>'+relation+'</p></div>'+
  '<div class="insight"><b>⚖️ 오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 집계됩니다. 이 숫자는 표면의 여덟 글자를 센 값이며, 신강·신약·용신은 월령과 지장간 등 추가 조건 없이 확정하지 않습니다.</p></div>';
- if(luck){document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세';
+ if(luck){const precise=(Number.isInteger(luck.startYears)?' · 세부 '+luck.startYears+'년 '+luck.startMonths+'개월 '+luck.startDays+'일':'');document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세'+precise;
  const lp=luck.pillars||[];
  document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+lp.map((x,i)=>'<button class="pillar luck-btn" style="min-width:72px;background:var(--paper)" onclick="showLuck('+i+',this)"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail">대운 카드를 누르면 해당 10년 흐름의 기본 정보를 볼 수 있습니다.</div>';
  window._luck=lp;}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
