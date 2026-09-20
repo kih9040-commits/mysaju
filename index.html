@@ -74,6 +74,7 @@ function tripleRelations(luckBranch,natal){
  const has=(...xs)=>xs.every(x=>all.includes(x));
  if(has('인','사','신'))out.push('삼형 · 인사신');
  if(has('축','술','미'))out.push('삼형 · 축술미');
+ if(has('자','묘'))out.push('상형 · 자묘');
  if(all.filter(x=>x==='자').length>=2)out.push('자형 · 자자');
  if(all.filter(x=>x==='오').length>=2)out.push('자형 · 오오');
  if(all.filter(x=>x==='유').length>=2)out.push('자형 · 유유');
