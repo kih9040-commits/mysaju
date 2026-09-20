@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>나의사주 - 나를 알아가는 시간</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard",
+        "Noto Sans KR", Arial, sans-serif;
+      background: #f8f6f2;
+      color: #292724;
+    }
+
+    button, input, select {
+      font-family: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    /* 전체 모바일형 컨테이너 */
+    .app {
+      width: 100%;
+      max-width: 520px;
+      min-height: 100vh;
+      margin: 0 auto;
+      background: #fffdf9;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 40px rgba(0,0,0,.05);
+    }
+
+    /* 상단 */
+    .header {
+      height: 68px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 22px;
+      border-bottom: 1px solid #eee9e1;
+      background: rgba(255,253,249,.95);
+    }
+
+    .logo {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -1px;
+    }
+
+    .logo span {
+      color: #795548;
+    }
+
+    .menu {
+      font-size: 23px;
+      color: #777;
+    }
+
+    /* 화면 */
+    .page {
+      display: none;
+      min-height: calc(100vh - 68px);
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    /* 메인 */
+    .hero {
+      padding: 58px 26px 30px;
+      text-align: center;
+    }
+
+    .small-badge {
+      display: inline-block;
+      padding: 8px 14px;
+      border-radius: 30px;
+      background: #f1e9df;
+      color: #795548;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 22px;
+    }
+
+    .hero-icon {
+      width: 105px;
+      height: 105px;
+      margin: 0 auto 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 50px;
+      background: linear-gradient(145deg,#f6eee5,#e7d5c4);
+      box-shadow: 0 12px 30px rgba(110,75,50,.15);
+    }
+
+    .hero h1 {
+      font-size: 32px;
+      line-height: 1.35;
+      letter-spacing: -1.8px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 strong {
+      color: #795548;
+    }
+
+    .hero p {
+      color: #77716c;
+      font-size: 15px;
+      line-height: 1.8;
+      margin-bottom: 30px;
+    }
+
+    .main-button {
+      width: 100%;
+      border: none;
+      border-radius: 15px;
+      padding: 18px 20px;
+      background: #342a25;
+      color: white;
+      font-size: 17px;
+      font-weight: 800;
+      box-shadow: 0 9px 20px rgba(52,42,37,.18);
+      transition: .2s;
+    }
+
+    .main-button:hover {
+      transform: translateY(-2px);
+    }
+
+    .sub-text {
+      font-size: 12px;
+      color: #aaa29b;
+      margin-top: 13px;
+    }
+
+    /* 특징 */
+    .features {
+      padding: 15px 22px 45px;
+    }
+
+    .features-title {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .feature-card {
+      background: white;
+      border: 1px solid #eee8df;
+      border-radius: 18px;
+      padding: 20px 15px;
+      min-height: 130px;
+    }
+
+    .feature-card .icon {
+      font-size: 27px;
+      margin-bottom: 13px;
+    }
+
+    .feature-card h3 {
+      font-size: 15px;
+      margin-bottom: 7px;
+    }
+
+    .feature-card p {
+      font-size: 12px;
+      color: #8c857f;
+      line-height: 1.6;
+    }
+
+    /* 입력 페이지 */
+    .form-page {
+      padding: 32px 22px 50px;
+    }
+
+    .back {
+      display: inline-block;
+      border: none;
+      background: transparent;
+      color: #777;
+      font-size: 14px;
+      margin-bottom: 30px;
+    }
+
+    .form-page h2 {
+      font-size: 27px;
+      letter-spacing: -1.4px;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .form-description {
+      color: #88817b;
+      font-size: 14px;
+      line-height: 1.7;
+      margin-bottom: 34px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .form-control {
+      width: 100%;
+      height: 54px;
+      border: 1px solid #ddd6cf;
+      background: white;
+      border-radius: 12px;
+      padding: 0 15px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: #795548;
+      box-shadow: 0 0 0 3px rgba(121,85,72,.08);
+    }
+
+    .gender {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .gender button {
+      height: 52px;
+      border: 1px solid #ddd6cf;
+      border-radius: 12px;
+      background: white;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .gender button.selected {
+      background: #f0e7dd;
+      border-color: #795548;
+      color: #5d4037;
+      font-weight: 800;
+    }
+
+    .notice {
+      padding: 15px;
+      background: #f7f3ee;
+      border-radius: 12px;
+      color: #847b74;
+      font-size: 12px;
+      line-height: 1.7;
+      margin: 25px 0;
+    }
+
+    /* 로딩 */
+    .loading-page {
+      padding: 100px 25px;
+      text-align: center;
+    }
+
+    .loading-symbol {
+      font-size: 65px;
+      animation: float 1.8s ease-in-out infinite;
+      margin-bottom: 30px;
+    }
+
+    @keyframes float {
+      0%,100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .loading-page h2 {
+      font-size: 25px;
+      margin-bottom: 13px;
+    }
+
+    .loading-page p {
+      color: #8a837d;
+      line-height: 1.7;
+      font-size: 14px;
+    }
+
+    .dots {
+      margin-top: 30px;
+      font-size: 22px;
+      letter-spacing: 5px;
+      color: #795548;
+    }
+
+    /* 결과 샘플 */
+    .result-page {
+      padding: 32px 22px 60px;
+    }
+
+    .result-top {
+      text-align: center;
+      padding: 25px 0 30px;
+    }
+
+    .result-character {
+      width: 100px;
+      height: 100px;
+      background: #efe5da;
+      border-radius: 50%;
+      margin: 0 auto 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+    }
+
+    .result-top h2 {
+      font-size: 25px;
+      margin-bottom: 9px;
+    }
+
+    .result-top p {
+      color: #888;
+      font-size: 14px;
+    }
+
+    .result-card {
+      background: white;
+      border: 1px solid #eee7df;
+      border-radius: 18px;
+      padding: 22px;
+      margin-bottom: 14px;
+    }
+
+    .result-card h3 {
+      font-size: 17px;
+      margin-bottom: 12px;
+    }
+
+    .result-card p {
+      color: #77716c;
+      font-size: 14px;
+      line-height: 1.8;
+    }
+
+    .elements {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 18px;
+    }
+
+    .element {
+      text-align: center;
+      font-size: 12px;
+    }
+
+    .element-circle {
+      width: 43px;
+      height: 43px;
+      margin-bottom: 6px;
+      border-radius: 50%;
+      background: #f3eee8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+    }
+
+    .again {
+      margin-top: 22px;
+      background: white;
+      color: #342a25;
+      border: 1px solid #d9d1ca;
+      box-shadow: none;
+    }
+
+    @media(max-width: 380px) {
+      .hero h1 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="app">
+
+  <header class="header">
+    <div class="logo">나의<span>사주</span></div>
+    <div class="menu">☰</div>
+  </header>
+
+  <!-- 메인화면 -->
+  <section id="home" class="page active">
+
+    <div class="hero">
+
+      <div class="small-badge">
+        ✦ 나를 알아가는 새로운 방법
+      </div>
+
+      <div class="hero-icon">☯</div>
+
+      <h1>
+        나는 어떤 운명을<br>
+        <strong>타고났을까요?</strong>
+      </h1>
+
+      <p>
+        태어난 순간에 담긴 이야기를 풀어<br>
+        나의 성향과 가능성을 알아보세요.
+      </p>
+
+      <button class="main-button" onclick="showPage('form')">
+        무료 사주 시작하기 →
+      </button>
+
+      <div class="sub-text">
+        회원가입 없이 무료로 확인할 수 있어요
+      </div>
+
+    </div>
+
+    <div class="features">
+
+      <h2 class="features-title">
+        무엇을 알 수 있나요?
+      </h2>
+
+      <div class="feature-grid">
+
+        <div class="feature-card">
+          <div class="icon">🌿</div>
+          <h3>나의 오행</h3>
+          <p>목·화·토·금·수의 균형을 확인합니다.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">🪞</div>
+          <h3>타고난 성향</h3>
+          <p>나에게 숨어있는 기질과 특징을 알아봅니다.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">💰</div>
+          <h3>재물운</h3>
+          <p>재물과 관련된 사주 흐름을 살펴봅니다.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="icon">💗</div>
+          <h3>연애운</h3>
+          <p>관계와 인연에 관한 흐름을 알아봅니다.</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  </section>
+
+  <!-- 입력화면 -->
+  <section id="form" class="page">
+
+    <div class="form-page">
+
+      <button class="back" onclick="showPage('home')">
+        ← 처음으로
+      </button>
+
+      <h2>
+        당신의 이야기를<br>
+        들려주세요.
+      </h2>
+
+      <p class="form-description">
+        정확한 분석을 위해 태어난 정보를 입력해주세요.
+      </p>
+
+      <div class="form-group">
+        <label>이름 또는 별명</label>
+        <input
+          id="username"
+          class="form-control"
+          type="text"
+          placeholder="예: 홍길동"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>생년월일</label>
+        <input
+          id="birth"
+          class="form-control"
+          type="date"
+        >
+      </div>
+
+      <div class="form-group">
+        <label>태어난 시간</label>
+
+        <select id="birthtime" class="form-control">
+          <option value="">태어난 시간을 선택해주세요</option>
+          <option>시간을 모름</option>
+          <option>자시 (23:00~00:59)</option>
+          <option>축시 (01:00~02:59)</option>
+          <option>인시 (03:00~04:59)</option>
+          <option>묘시 (05:00~06:59)</option>
+          <option>진시 (07:00~08:59)</option>
+          <option>사시 (09:00~10:59)</option>
+          <option>오시 (11:00~12:59)</option>
+          <option>미시 (13:00~14:59)</option>
+          <option>신시 (15:00~16:59)</option>
+          <option>유시 (17:00~18:59)</option>
+          <option>술시 (19:00~20:59)</option>
+          <option>해시 (21:00~22:59)</option>
+        </select>
+
+      </div>
+
+      <div class="form-group">
+        <label>성별</label>
+
+        <div class="gender">
+          <button onclick="selectGender(this)">남성</button>
+          <button onclick="selectGender(this)">여성</button>
+        </div>
+
+      </div>
+
+      <div class="notice">
+        🔒 입력한 정보는 현재 테스트 화면에서 서버에 저장되지 않습니다.
+      </div>
+
+      <button class="main-button" onclick="startAnalysis()">
+        내 사주 확인하기
+      </button>
+
+    </div>
+
+  </section>
+
+  <!-- 분석중 -->
+  <section id="loading" class="page">
+
+    <div class="loading-page">
+
+      <div class="loading-symbol">☯</div>
+
+      <h2>사주를 살펴보고 있어요</h2>
+
+      <p>
+        태어난 날에 담긴 기운을<br>
+        하나씩 살펴보는 중입니다.
+      </p>
+
+      <div class="dots">● ● ●</div>
+
+    </div>
+
+  </section>
+
+  <!-- 결과화면 -->
+  <section id="result" class="page">
+
+    <div class="result-page">
+
+      <div class="result-top">
+
+        <div class="result-character">🌳</div>
+
+        <h2>
+          <span id="resultName">당신</span>의 사주
+        </h2>
+
+        <p>부드럽지만 단단한 나무의 기운</p>
+
+      </div>
+
+      <div class="result-card">
+
+        <h3>🌿 나의 오행</h3>
+
+        <p>
+          현재는 화면 테스트를 위한 샘플 결과입니다.
+          이후 실제 만세력 계산 기능을 연결할 수 있습니다.
+        </p>
+
+        <div class="elements">
+
+          <div class="element">
+            <div class="element-circle">木</div>
+            목
+          </div>
+
+          <div class="element">
+            <div class="element-circle">火</div>
+            화
+          </div>
+
+          <div class="element">
+            <div class="element-circle">土</div>
+            토
+          </div>
+
+          <div class="element">
+            <div class="element-circle">金</div>
+            금
+          </div>
+
+          <div class="element">
+            <div class="element-circle">水</div>
+            수
+          </div>
+
+        </div>
+
+      </div>
+
+      <div class="result-card">
+        <h3>🪞 타고난 성향</h3>
+        <p>
+          새로운 가능성을 발견하고 꾸준히 성장하려는 성향을
+          가지고 있습니다. 자신의 기준이 분명하며 한 번 정한
+          목표에는 끈기 있게 다가가는 편입니다.
+        </p>
+      </div>
+
+      <div class="result-card">
+        <h3>💰 재물운</h3>
+        <p>
+          이 영역에는 향후 실제 사주 계산 결과를 바탕으로
+          재물과 관련된 해석이 표시됩니다.
+        </p>
+      </div>
+
+      <div class="result-card">
+        <h3>💗 연애 · 인연</h3>
+        <p>
+          이 영역에는 관계와 인연에 관한 사주 분석 결과를
+          표시할 수 있습니다.
+        </p>
+      </div>
+
+      <button class="main-button again" onclick="showPage('home')">
+        다시 알아보기
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+<script>
+
+  let selectedGender = "";
+
+  function showPage(pageId) {
+
+    const pages = document.querySelectorAll(".page");
+
+    pages.forEach(function(page) {
+      page.classList.remove("active");
+    });
+
+    document
+      .getElementById(pageId)
+      .classList.add("active");
+
+    window.scrollTo(0, 0);
+  }
+
+  function selectGender(button) {
+
+    const buttons =
+      document.querySelectorAll(".gender button");
+
+    buttons.forEach(function(btn) {
+      btn.classList.remove("selected");
+    });
+
+    button.classList.add("selected");
+
+    selectedGender = button.innerText;
+  }
+
+  function startAnalysis() {
+
+    const name =
+      document.getElementById("username").value.trim();
+
+    const birth =
+      document.getElementById("birth").value;
+
+    if (!birth) {
+      alert("생년월일을 입력해주세요.");
+      return;
+    }
+
+    if (!selectedGender) {
+      alert("성별을 선택해주세요.");
+      return;
+    }
+
+    if (name) {
+      document.getElementById("resultName").innerText = name;
+    } else {
+      document.getElementById("resultName").innerText = "당신";
+    }
+
+    showPage("loading");
+
+    setTimeout(function() {
+      showPage("result");
+    }, 2200);
+
+  }
+
+</script>
+
+</body>
+</html>
