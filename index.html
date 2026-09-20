@@ -70,6 +70,13 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 .result-page .result-card p{font-size:13.5px;color:#665d54}.result-page .pillar b{font-size:28px;color:#6f432c}
 .section-kicker{color:#9a603d!important;font-size:10px!important}.insight b{font-size:15px!important;color:#3c2e25}
 @media(max-width:420px){.birth-selects{grid-template-columns:1.25fr .9fr .9fr;gap:6px}.birth-selects .control{padding:0 7px;font-size:14px}.form-intro h2{font-size:32px}}
+
+/* Luck interaction affordance */
+.tap-guide{margin:4px 0 15px;padding:13px 14px;border-radius:14px;background:linear-gradient(135deg,#f3e3cf,#fff8ee);border:1px solid #d9b991;color:#65402b}
+.tap-guide b{display:block;font-size:13px;margin-bottom:4px}.tap-guide span{display:block;font-size:11px;line-height:1.5;color:#806b5c}
+.luck-btn{position:relative;border:1.5px solid #d9c2a5!important;box-shadow:0 5px 14px #69492f0d;transition:.15s}
+.luck-btn:after{content:"눌러보기";display:block;margin-top:5px;font-size:9px;font-weight:800;color:#9a6644}
+.luck-btn.on:after{content:"선택됨";color:#68412b}
 </style>
 </head>
 <body><main class="app">
@@ -92,7 +99,7 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 <div class="result-card"><span class="section-kicker">03 · ELEMENTS</span><h3>오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>나를 나타내는 일간</h3><p id="dayMaster"></p></div>
 <div class="result-card"><h3>십성 · 관계의 구조</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
-<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><p id="luckMeta"></p><div id="luckPillars"></div></div>
+<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><div class="tap-guide"><b>👇 대운을 눌러 자세히 확인해보세요</b><span>각 시기별 합·충·관계와 해석이 아래에 펼쳐집니다.</span></div><p id="luckMeta"></p><div id="luckPillars"></div></div>
 <div class="result-card detail-card"><span class="section-kicker">05 · READING</span><h3>상세 풀이</h3><div id="detailReading"></div><p style="margin-top:12px">※ 전통 명리 해석의 일반적인 관점에 따른 참고용 설명이며, 중요한 의사결정을 대신하지 않습니다.</p></div>
 
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
