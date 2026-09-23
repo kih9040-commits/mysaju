@@ -84,6 +84,12 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 .life-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.life-grid>div{padding:12px;border-radius:12px;background:#fffaf3;border:1px solid #eadbc8}.life-grid b{display:block;font-size:12px;margin-bottom:5px;color:#493327}.life-grid span{display:block;font-size:11px;line-height:1.6;color:#6f6258}.life-grid .wide{grid-column:1/-1}
 .theory-toggle{margin-top:13px;padding-top:12px;border-top:1px dashed #d9c8b4}.theory-toggle>b{font-size:11px;color:#8c796a}.theory-toggle p{font-size:10.5px!important;margin:9px 0 0!important;color:#887b70!important}
 @media(max-width:360px){.life-grid{grid-template-columns:1fr}}
+
+/* Luck result clarity */
+.decade-overview{padding:15px;border-radius:14px;background:#f4e4cf;border:1px solid #dfbea0;margin-bottom:12px}.decade-overview b{display:block;font-size:14px;color:#4a2f20;margin-bottom:7px}.decade-overview p{font-size:13px!important;line-height:1.75!important;color:#57483d!important;margin:0!important}
+.theory-details{margin-top:14px;padding-top:12px;border-top:1px dashed #d9c8b4}.theory-details summary,.calc-basis summary{cursor:pointer;font-size:11px;font-weight:800;color:#8b7563}.theory-toggle{margin-top:10px;padding-top:0;border-top:0}
+.calc-basis{margin:0 0 12px;border-top:1px dashed #dfcfbd;padding-top:9px}.calc-basis p{margin:8px 0 0!important;font-size:10.5px!important;color:#8a7d72!important}
+.luck-headline{font-size:19px!important}.life-grid span{font-size:12px!important;line-height:1.72!important}.life-grid b{font-size:13px!important}
 </style>
 </head>
 <body><main class="app">
@@ -106,7 +112,7 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 <div class="result-card"><span class="section-kicker">03 · ELEMENTS</span><h3>오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
 <div class="result-card"><h3>나를 나타내는 일간</h3><p id="dayMaster"></p></div>
 <div class="result-card"><h3>십성 · 관계의 구조</h3><p>일간을 기준으로 각 기둥의 관계를 표시합니다.</p><div id="tenGods"></div></div>
-<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><p class="luck-why"><b>왜 10년씩 보나요?</b><br>대운은 약 10년 단위로 삶의 큰 흐름이 어떻게 달라지는지를 살펴보는 방식입니다. 지금의 흐름과 다음 시기의 핵심 주제를 비교해보세요.</p><div class="tap-guide"><b>👇 대운을 눌러 자세히 확인해보세요</b><span>각 시기별 합·충·관계와 해석이 아래에 펼쳐집니다.</span></div><p id="luckMeta"></p><div id="luckPillars"></div></div>
+<div class="result-card luck-card"><span class="section-kicker">04 · LIFE CYCLE</span><h3>대운 흐름</h3><p class="luck-why"><b>왜 10년씩 보나요?</b><br>대운은 약 10년 단위로 삶의 큰 방향이 어떻게 달라지는지를 살펴보는 방식입니다. <strong>직업·돈·관계·환경 변화 중 무엇이 중요해지는지</strong> 비교해보세요.</p><div class="tap-guide"><b>👇 궁금한 10년을 눌러보세요</b><span>각 시기의 핵심 주제와 일·돈·연애·변화 포인트를 바로 보여드립니다.</span></div><details class="calc-basis"><summary>계산 기준 보기</summary><p id="luckMeta"></p></details><div id="luckPillars"></div></div>
 <div class="result-card detail-card"><span class="section-kicker">05 · READING</span><h3>상세 풀이</h3><div id="detailReading"></div><p style="margin-top:12px">※ 전통 명리 해석의 일반적인 관점에 따른 참고용 설명이며, 중요한 의사결정을 대신하지 않습니다.</p></div>
 
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
@@ -194,7 +200,7 @@ function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o)
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
  const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
  const life=luckLifeReading(stem,branch,rel),endAge=Number(x.age)+9;
- document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><div class="theory-toggle"><b>명리 관계</b>'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div>'};
+ document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="decade-overview"><b>🔎 이 10년, 한눈에 보면</b><p>'+life.overview+'</p></div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><details class="theory-details"><summary>해석 근거 보기</summary><div class="theory-toggle">'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div></details>'};
 window.toggleUnknownTime=val=>{unknownTime=val;const box=document.getElementById('timeInputs');box.classList.toggle('disabled-time',val);['hour','minute'].forEach(id=>{const el=document.getElementById(id);el.disabled=val;if(val)el.value=''});};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
