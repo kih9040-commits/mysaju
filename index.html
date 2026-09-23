@@ -90,6 +90,11 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 .theory-details{margin-top:14px;padding-top:12px;border-top:1px dashed #d9c8b4}.theory-details summary,.calc-basis summary{cursor:pointer;font-size:11px;font-weight:800;color:#8b7563}.theory-toggle{margin-top:10px;padding-top:0;border-top:0}
 .calc-basis{margin:0 0 12px;border-top:1px dashed #dfcfbd;padding-top:9px}.calc-basis p{margin:8px 0 0!important;font-size:10.5px!important;color:#8a7d72!important}
 .luck-headline{font-size:19px!important}.life-grid span{font-size:12px!important;line-height:1.72!important}.life-grid b{font-size:13px!important}
+
+/* Personalized decade signature */
+.signature-box{margin:10px 0 12px;padding:15px 16px;border-radius:15px;background:linear-gradient(135deg,#3d2d24,#6f4a35);color:#fff;box-shadow:0 8px 20px #4c33201a}.signature-box small{display:block;font-size:10px;font-weight:800;letter-spacing:.4px;color:#f0d9c8;margin-bottom:7px}.signature-box b{display:block;font-size:14px;line-height:1.7}
+.fresh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.fresh-grid>div{padding:13px;border-radius:13px;background:#fffaf4;border:1px solid #e7d4be}.fresh-grid .wide{grid-column:1/-1;background:#f2e5d3}.fresh-grid em{display:block;font-style:normal;font-size:10px;font-weight:900;color:#96603f;margin-bottom:6px}.fresh-grid strong{display:block;font-size:12px;line-height:1.58;color:#3f3027}.symbol-note{margin:11px 2px 0;font-size:9.5px;line-height:1.55;color:#918377}
+@media(max-width:360px){.fresh-grid{grid-template-columns:1fr}.fresh-grid .wide{grid-column:auto}}
 </style>
 </head>
 <body><main class="app">
@@ -144,7 +149,7 @@ function tripleRelations(luckBranch,natal){
  if(has('인','사','신'))out.push('삼형 · 인사신');
  if(has('축','술','미'))out.push('삼형 · 축술미');
  if(has('자','묘'))out.push('상형 · 자묘');
- if(all.filter(x=>x==='자').length>=2)out.push('자형 · 자자');
+ if(all.filter(x=>x==='진').length>=2)out.push('자형 · 진진');
  if(all.filter(x=>x==='오').length>=2)out.push('자형 · 오오');
  if(all.filter(x=>x==='유').length>=2)out.push('자형 · 유유');
  if(all.filter(x=>x==='해').length>=2)out.push('자형 · 해해');
@@ -160,6 +165,78 @@ function relationNarrative(rel){
  if(types.includes('합'))t+='사람·일·기회가 새롭게 연결되거나 기존 관계가 더 깊어지는 흐름을 살펴볼 수 있습니다. ';
  if(types.includes('파')||types.includes('해'))t+='기존 계획이나 관계의 미세한 균열, 오해, 방향 수정이 필요한지도 함께 살펴보세요. ';
  return t+'이 관계만으로 실제 사건이나 길흉을 단정하지는 않습니다.';
+}
+function tenGodFor(dayStem,otherStem){
+ const prop={갑:['목',1],을:['목',0],병:['화',1],정:['화',0],무:['토',1],기:['토',0],경:['금',1],신:['금',0],임:['수',1],계:['수',0]};
+ const cycle=['목','화','토','금','수'],a=prop[dayStem],b=prop[otherStem];if(!a||!b)return '';
+ const same=a[1]===b[1],ai=cycle.indexOf(a[0]),bi=cycle.indexOf(b[0]);
+ if(ai===bi)return same?'비견':'겁재';
+ if((ai+1)%5===bi)return same?'식신':'상관';
+ if((ai+2)%5===bi)return same?'편재':'정재';
+ if((bi+1)%5===ai)return same?'편인':'정인';
+ if((bi+2)%5===ai)return same?'편관':'정관';
+ return '';
+}
+const elementSymbol={
+ 목:{color:'초록·청록 계열',item:'작은 식물, 나무 소재, 기록 노트',action:'새로운 기술 하나를 꾸준히 키우기'},
+ 화:{color:'코랄·주황·붉은 포인트',item:'따뜻한 조명, 밝은 소품, 운동 아이템',action:'생각을 밖으로 표현하고 몸을 움직이기'},
+ 토:{color:'베이지·황토·브라운 계열',item:'도자기, 돌·흙 소재, 정리함',action:'생활 루틴과 돈의 기본 구조를 단단히 하기'},
+ 금:{color:'화이트·실버·회색 계열',item:'금속 소품, 시계, 정리 도구',action:'버릴 것과 남길 것을 명확히 정하기'},
+ 수:{color:'네이비·블루·블랙 포인트',item:'유리 소품, 물병, 이동용 가방',action:'정보를 모으되 결정 기준을 하나 세우기'}
+};
+const helperByTenGod={
+ 비견:'나와 비슷한 분야에서 실무 경험이 많은 동료·친구형',
+ 겁재:'경쟁심은 있지만 행동이 빠르고 판을 넓혀주는 동료형',
+ 식신:'말보다 결과물로 보여주는 차분한 실무자·선배형',
+ 상관:'고정관념을 깨고 새로운 관점을 주는 기획자·전문가형',
+ 정재:'약속과 숫자에 정확한 현실적인 관리자·재무형',
+ 편재:'사람과 기회를 연결해주는 영업·사업·네트워크형',
+ 정관:'규칙과 절차를 잘 아는 상사·공공기관·관리자형',
+ 편관:'결정을 미루지 않고 밀어붙이는 강한 리더·멘토형',
+ 정인:'차근차근 알려주고 문서·자격·지식을 챙겨주는 스승형',
+ 편인:'남들이 잘 모르는 분야를 깊게 파는 전문가·연구자형'
+};
+const tabooByTenGod={
+ 비견:'친한 사람과 돈·역할을 애매하게 섞는 것',
+ 겁재:'보증·공동명의·감정적인 동업 결정',
+ 식신:'준비만 오래 하고 실제 시작을 계속 미루는 것',
+ 상관:'화난 상태에서 말이나 메시지로 관계를 끊어버리는 것',
+ 정재:'안전만 고집하다 필요한 변화까지 미루는 것',
+ 편재:'한 번에 너무 크게 벌이거나 분위기에 휩쓸려 돈을 쓰는 것',
+ 정관:'규칙과 책임을 혼자 다 떠안아 지치는 것',
+ 편관:'압박받는 순간 욱해서 퇴사·결별 같은 큰 결정을 하는 것',
+ 정인:'공부·정보 수집만 늘리고 실행 시점을 놓치는 것',
+ 편인:'혼자 추측해서 결론 내리고 사람과 거리를 두는 것'
+};
+function relationSpotlight(rel){
+ const picks=[];
+ rel.forEach(v=>{
+  const type=v.split(' · ')[0];
+  if(v.includes('(월지)'))picks.push(type==='충'?'직장·조직·역할 변화가 크게 느껴지는지':'직장·조직에서 새로운 연결이 생기는지');
+  if(v.includes('(일지)'))picks.push(type==='충'?'생활 방식이나 가까운 관계를 다시 정리하게 되는지':'가까운 관계·파트너십이 깊어지는지');
+  if(v.includes('(년지)'))picks.push(type==='충'?'가족·주변 인맥의 환경 변화가 있는지':'가족·주변 인맥을 통해 연결이 생기는지');
+  if(v.includes('(시지)'))picks.push(type==='충'?'장기 계획·개인 프로젝트의 방향을 바꾸게 되는지':'미래 계획·개인 프로젝트가 구체화되는지');
+ });
+ return [...new Set(picks)].slice(0,2);
+}
+function personalizedLuck(stem,branch,rel){
+ const p=window._profile||{}, luckEl=stemEl[stem]||branchEl[branch]||'', tg=tenGodFor(p.dayStem,stem), symbol=elementSymbol[p.weakest?.[0]]||elementSymbol[luckEl]||{};
+ const strong=p.strongest?.[0], weak=p.weakest?.[0], spots=relationSpotlight(rel);
+ let signature='이번 대운의 '+luckEl+' 기운이 들어오면서 ';
+ if(luckEl&&luckEl===weak)signature+='원국에서 상대적으로 적었던 '+weak+' 기운이 보강되는 모양입니다. 평소 덜 쓰던 방식이나 새로운 선택을 시도해보는 시기로 읽어볼 수 있습니다.';
+ else if(luckEl&&luckEl===strong)signature+='이미 많이 드러난 '+strong+' 기운이 더 강조됩니다. 잘하는 것을 크게 쓸 수 있지만 과해질 때의 부작용도 같이 관리하는 것이 포인트입니다.';
+ else signature+=(tg?tg+' 성향이':'새로운 흐름이')+' 원래 사주의 성향과 섞이는 시기입니다. 평소와 다른 역할을 맡을 때 반응을 관찰해보세요.';
+ if(spots.length)signature+=' 특히 '+spots.join(', ')+'를 눈여겨보세요.';
+ return {
+  tenGod:tg||'',
+  signature,
+  helper:helperByTenGod[tg]||'내 부족한 부분을 구체적으로 보완해주는 현실적인 사람',
+  taboo:tabooByTenGod[tg]||'감정이 앞선 큰 결정과 한 번에 너무 많은 선택',
+  color:symbol.color||'차분한 중성 계열',
+  item:symbol.item||'정리와 기록에 도움이 되는 소품',
+  action:symbol.action||'한 가지 목표를 정해 꾸준히 실행하기',
+  weak:weak||'', strong:strong||''
+ };
 }
 function luckLifeReading(stem,branch,rel){
  const el=stemEl[stem]||branchEl[branch]||'', types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
@@ -199,8 +276,8 @@ window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').for
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
  const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
- const life=luckLifeReading(stem,branch,rel),endAge=Number(x.age)+9;
- document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="decade-overview"><b>🔎 이 10년, 한눈에 보면</b><p>'+life.overview+'</p></div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><details class="theory-details"><summary>해석 근거 보기</summary><div class="theory-toggle">'+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div></details>'};
+ const life=luckLifeReading(stem,branch,rel),personal=personalizedLuck(stem,branch,rel),endAge=Number(x.age)+9;
+ document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="signature-box"><small>내 사주에 대입하면</small><b>'+personal.signature+'</b></div><div class="fresh-grid"><div><em>🚫 이 시기 금기</em><strong>'+personal.taboo+'</strong></div><div><em>🤝 도움되는 사람</em><strong>'+personal.helper+'</strong></div><div><em>🎨 보완 컬러</em><strong>'+personal.color+'</strong></div><div><em>🧿 상징 소품</em><strong>'+personal.item+'</strong></div><div class="wide"><em>✅ 가장 먼저 해볼 것</em><strong>'+personal.action+'</strong></div></div><div class="decade-overview"><b>🔎 이 10년, 현실에서는</b><p>'+life.overview+'</p></div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><div class="symbol-note">※ 컬러·소품은 <b>오행의 단순 개수에서 상대적으로 적은 기운을 상징적으로 보완해보는 재미 요소</b>입니다. 용신·행운색을 확정한 결과는 아닙니다.</div><details class="theory-details"><summary>왜 이렇게 나왔는지 보기</summary><div class="theory-toggle">'+(personal.tenGod?'<div class="tags"><span class="tag">대운 천간 십성 · '+personal.tenGod+'</span></div>':'')+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div></details>'};
 window.toggleUnknownTime=val=>{unknownTime=val;const box=document.getElementById('timeInputs');box.classList.toggle('disabled-time',val);['hour','minute'].forEach(id=>{const el=document.getElementById(id);el.disabled=val;if(val)el.value=''});};
 window.calculate=()=>{
  const err=document.getElementById('formError');err.textContent='';
@@ -232,6 +309,7 @@ function render(r){
  document.getElementById('tenGods').innerHTML='<div class="pillars">'+order.map(([label,key])=>{const v=tg[key]||{};return '<div class="pillar"><small>'+label+'</small><b style="font:700 13px sans-serif">'+(v.stem||'-')+'</b><span>'+(v.branch||'-')+'</span></div>'}).join('')+'</div>';
  const luck=r.luckPillars;
  const tenLabels=order.map(([label,key])=>tg[key]?.stem).filter(Boolean).filter(x=>x!=='일간');
+ window._profile={dayStem:stem,counts,strongest,weakest,tenLabels};
  const dayText={
  '갑':'갑목은 큰 나무에 비유해 방향성과 성장, 곧게 뻗으려는 성향을 읽는 일간입니다.','을':'을목은 풀과 덩굴에 비유해 유연함과 적응력, 관계 속 성장의 성향을 읽는 일간입니다.',
  '병':'병화는 태양에 비유해 표현력과 확산, 밝게 드러내는 성향을 읽는 일간입니다.','정':'정화는 등불에 비유해 섬세함과 집중, 필요한 곳을 비추는 성향을 읽는 일간입니다.',
