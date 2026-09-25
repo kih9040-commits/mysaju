@@ -182,16 +182,16 @@ body{position:relative;overflow-x:hidden;background:
 @keyframes seasonHaze{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(16px,-12px,0) scale(1.06)}}
 
 /* Branches slowly bud, open, fade — a quiet visual metaphor for time */
-.season-sprig{position:absolute;width:145px;height:210px;opacity:.22;transform-origin:bottom center}
-.season-sprig:before{content:"";position:absolute;width:2px;height:185px;left:58px;bottom:0;background:linear-gradient(180deg,transparent,#92795d 18%,#806a54 86%,transparent);transform:rotate(24deg);border-radius:99px}
+.season-sprig{position:absolute;width:190px;height:270px;opacity:.22;transform-origin:bottom center}
+.season-sprig:before{content:"";position:absolute;width:2.5px;height:235px;left:76px;bottom:0;background:linear-gradient(180deg,transparent,#92795d 18%,#806a54 86%,transparent);transform:rotate(24deg);border-radius:99px}
 .sprig-a{left:-18px;top:11%;transform:rotate(-8deg)}
 .sprig-b{right:-25px;bottom:8%;transform:rotate(174deg);opacity:.17}
-.season-sprig i{position:absolute;width:25px;height:13px;background:linear-gradient(135deg,#8d9a72,#b7aa7c);border-radius:90% 8% 90% 8%;transform-origin:0 50%;opacity:0;animation:leafLife 11s ease-in-out infinite}
-.season-sprig i:nth-child(1){left:47px;top:35px;transform:rotate(-42deg);animation-delay:-1s}
-.season-sprig i:nth-child(2){left:67px;top:72px;transform:rotate(26deg);animation-delay:-3s}
-.season-sprig i:nth-child(3){left:38px;top:108px;transform:rotate(-50deg);animation-delay:-5s}
-.season-sprig i:nth-child(4){left:77px;top:135px;transform:rotate(32deg);animation-delay:-7s}
-.season-sprig i:nth-child(5){left:51px;top:164px;transform:rotate(-34deg);animation-delay:-9s}
+.season-sprig i{position:absolute;width:38px;height:20px;background:linear-gradient(135deg,#8d9a72,#b7aa7c);border-radius:90% 8% 90% 8%;transform-origin:0 50%;opacity:0;animation:leafLife 11s ease-in-out infinite}
+.season-sprig i:nth-child(1){left:61px;top:42px;transform:rotate(-42deg);animation-delay:-1s}
+.season-sprig i:nth-child(2){left:88px;top:90px;transform:rotate(26deg);animation-delay:-3s}
+.season-sprig i:nth-child(3){left:50px;top:137px;transform:rotate(-50deg);animation-delay:-5s}
+.season-sprig i:nth-child(4){left:101px;top:174px;transform:rotate(32deg);animation-delay:-7s}
+.season-sprig i:nth-child(5){left:68px;top:215px;transform:rotate(-34deg);animation-delay:-9s}
 @keyframes leafLife{
  0%,10%,100%{opacity:0;filter:saturate(.7);scale:.25}
  25%{opacity:.5;filter:saturate(.9);scale:.78}
@@ -216,17 +216,14 @@ body{position:relative;overflow-x:hidden;background:
 .app{background:linear-gradient(180deg,#fbf7efe9 0,#f7f1e7ed 100%);backdrop-filter:blur(1px)}
 
 /* Stronger card entrance + stronger desktop hover */
-.motion-reveal{opacity:0;transform:translateY(34px) scale(.965);filter:blur(1.5px);transition:
- opacity .72s ease var(--reveal-delay,0ms),
- transform .72s cubic-bezier(.16,.8,.22,1) var(--reveal-delay,0ms),
- filter .6s ease var(--reveal-delay,0ms)}
-.motion-reveal.motion-in{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+.motion-reveal{opacity:0;transform:translateY(16px);filter:none;transition:opacity .58s ease var(--reveal-delay,0ms),transform .58s cubic-bezier(.2,.75,.25,1) var(--reveal-delay,0ms)}
+.motion-reveal.motion-in{opacity:1;transform:none;filter:none}
 @media (hover:hover) and (pointer:fine){
- .card:hover,.result-card:hover,.form-page .field:hover{transform:translateY(-7px) scale(1.012);border-color:#cfa77d;box-shadow:0 20px 44px #60472e21}
- .now-card:hover,.luck-detail:hover{transform:translateY(-5px) scale(1.008);box-shadow:0 20px 42px #3b2b2028}
- .luck-btn:hover{transform:translateY(-7px) scale(1.045);box-shadow:0 14px 28px #68482f24}
+ .card:hover,.result-card:hover,.form-page .field:hover{transform:translateY(-3px);border-color:#d4b58f;box-shadow:0 14px 34px #60472e16}
+ .now-card:hover,.luck-detail:hover{transform:translateY(-2px);box-shadow:0 16px 34px #3b2b201f}
+ .luck-btn:hover{transform:translateY(-4px) scale(1.025);border-color:#b78359!important;box-shadow:0 10px 22px #68482f1b}
 }
-.card:active,.result-card:active,.luck-btn:active{transform:scale(.985)}
+.card:active,.result-card:active,.luck-btn:active{transform:scale(.99)}
 
 /* Keep the good button shimmer */
 .primary{animation:sajuButtonGlow 5.4s ease-in-out infinite}
@@ -235,13 +232,17 @@ body{position:relative;overflow-x:hidden;background:
  .season-sprig{opacity:.14}
  .sprig-b{opacity:.11}
  .season-particle:nth-child(2n){display:none}
- .motion-reveal{transform:translateY(28px) scale(.97)}
+ .motion-reveal{transform:translateY(16px)}
 }
 @media(prefers-reduced-motion:reduce){
  .season-haze,.season-sprig i,.season-particle{animation:none!important}
  .season-fall{display:none}
  .motion-reveal{opacity:1!important;transform:none!important;filter:none!important}
 }
+
+/* SAJUROUM · SHIMMER PRESERVE
+   버튼 반짝임은 이전 버전의 은은한 강도로 유지 */
+.primary{animation:sajuButtonGlow 5.4s ease-in-out infinite}
 </style>
 </head>
 <body><div id="sajuSeason" class="saju-season" aria-hidden="true">
@@ -522,7 +523,7 @@ function initSajuMotion(){
    p.style.setProperty('--delay',(-Math.random()*20)+'s');
    p.style.setProperty('--drift',((Math.random()*130)-65)+'px');
    p.style.setProperty('--turn',((Math.random()*440)-220)+'deg');
-   p.style.setProperty('--size',(petal?5+Math.random()*5:7+Math.random()*7)+'px');
+   p.style.setProperty('--size',(petal?10+Math.random()*8:13+Math.random()*10)+'px');
    fall.appendChild(p);
   }
   fall.dataset.ready='1';
