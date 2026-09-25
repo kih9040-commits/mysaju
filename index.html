@@ -649,6 +649,32 @@ function renderUnknown(samples){
  }
  showPage('result');window.scrollTo({top:0,left:0,behavior:'auto'});
 }
+const tenGroupMap={
+ 비견:'비겁',겁재:'비겁',식신:'식상',상관:'식상',정재:'재성',편재:'재성',정관:'관성',편관:'관성',정인:'인성',편인:'인성'
+};
+const tenGroupText={
+ 비겁:{title:'자기주도 · 독립',desc:'내 기준으로 결정하고 직접 움직이는 힘이 삶의 중심축으로 작동하기 쉽습니다.',strength:'독립성·추진력·경쟁에서 버티는 힘',caution:'모든 일을 혼자 해결하려 하거나 주도권 문제로 부딪히는 것',best:'책임과 권한이 분명한 환경'},
+ 식상:{title:'표현 · 생산',desc:'생각을 말·기술·결과물로 밖에 꺼내는 힘이 삶의 중심축으로 작동하기 쉽습니다.',strength:'표현력·기술·기획·콘텐츠·문제 해결',caution:'말이 앞서거나 지루함을 못 견뎌 방향을 자주 바꾸는 것',best:'실력과 결과물이 눈에 보이는 환경'},
+ 재성:{title:'현실 · 성과',desc:'돈·성과·자원·생활 기반처럼 현실적인 결과를 만드는 일이 삶의 중심축으로 작동하기 쉽습니다.',strength:'실리 감각·자원 관리·성과 지향·생활력',caution:'돈과 책임을 너무 많이 끌어안거나 성과만 보고 무리하는 것',best:'노력과 보상이 비교적 명확한 환경'},
+ 관성:{title:'책임 · 자리',desc:'역할·책임·규칙·평판처럼 사회 속 내 자리를 만드는 일이 삶의 중심축으로 작동하기 쉽습니다.',strength:'책임감·조직 적응·신뢰·기준 세우기',caution:'남의 기대와 규칙까지 전부 내 책임처럼 떠안는 것',best:'역할과 기준이 분명하고 성장 경로가 있는 환경'},
+ 인성:{title:'배움 · 전문성',desc:'정보를 이해하고 쌓아 전문성으로 만드는 힘이 삶의 중심축으로 작동하기 쉽습니다.',strength:'학습·분석·자격·문서·깊이 있는 이해',caution:'생각과 준비가 길어져 행동 시점을 놓치는 것',best:'전문지식이 시간이 갈수록 자산이 되는 환경'}
+};
+function getTenAxis(labels=[]){
+ const counts={비겁:0,식상:0,재성:0,관성:0,인성:0};
+ labels.forEach(x=>{const g=tenGroupMap[x];if(g)counts[g]++});
+ const ranked=Object.entries(counts).sort((a,b)=>b[1]-a[1]);
+ return {counts,top:ranked[0]||['비겁',0],second:ranked[1]||['식상',0]};
+}
+function renderTenAxis(profile){
+ const host=document.getElementById('tenAxis');if(!host)return;
+ const axis=getTenAxis(profile.tenLabels||[]),top=axis.top,second=axis.second,info=tenGroupText[top[0]],info2=tenGroupText[second[0]];
+ profile.tenAxis=axis;
+ const total=Math.max(1,Object.values(axis.counts).reduce((a,b)=>a+b,0));
+ host.innerHTML='<div class="ten-axis-title"><small>사주의 중심축</small><b>'+top[0]+' · '+info.title+'</b><p>'+info.desc+'</p></div>'+
+ '<div class="ten-axis-bars">'+Object.entries(axis.counts).map(([k,v])=>'<div class="axis-row"><span>'+k+'</span><div><i style="width:'+(v/total*100)+'%"></i></div><em>'+v+'</em></div>').join('')+'</div>'+
+ '<div class="axis-grid"><div><em>💪 잘 쓰면 강점</em><strong>'+info.strength+'</strong></div><div><em>⚠️ 과해질 때</em><strong>'+info.caution+'</strong></div><div><em>🌱 잘 맞는 환경</em><strong>'+info.best+'</strong></div><div><em>➕ 두 번째 축</em><strong>'+second[0]+' · '+info2.title+'</strong></div></div>'+
+ '<p class="axis-note">※ 십성의 개수만으로 좋고 나쁨을 판단하지 않습니다. 천간·지지에 드러난 십성을 묶어 삶을 풀어가는 경향을 보여주는 참고 지표입니다.</p>';
+}
 function buildOverallReading(p){
  const day=p.dayStem||'', dm=names[day]||day, strong=p.strongest?.[0]||'', weak=p.weakest?.[0]||'', labels=p.tenLabels||[];
  const has=(...xs)=>labels.some(x=>xs.includes(x));
