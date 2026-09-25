@@ -168,9 +168,88 @@ body{position:relative;overflow-x:hidden;background:
  .motion-reveal{opacity:1!important;transform:none!important;transition:none!important}
  .card,.result-card,.now-card,.luck-detail,.form-page .field,.primary,.choice,.luck-btn{transition:none!important}
 }
+
+/* =========================================================
+   SAJUROUM · SEASONAL TIME FLOW
+   별빛 대신 '시간이 흐르는 자연' — 새잎, 꽃잎, 낙엽의 순환
+   ========================================================= */
+.saju-sky{display:none!important}
+.saju-season{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0;background:
+ linear-gradient(180deg,#f0eadf 0%,#ece5da 46%,#e9e1d5 100%)}
+.season-haze{position:absolute;border-radius:50%;filter:blur(55px);opacity:.16;animation:seasonHaze 16s ease-in-out infinite}
+.haze-a{width:320px;height:320px;left:-100px;top:5%;background:#d8c49b}
+.haze-b{width:340px;height:340px;right:-120px;bottom:8%;background:#b9a989;animation-delay:-7s}
+@keyframes seasonHaze{0%,100%{transform:translate3d(0,0,0) scale(1)}50%{transform:translate3d(16px,-12px,0) scale(1.06)}}
+
+/* Branches slowly bud, open, fade — a quiet visual metaphor for time */
+.season-sprig{position:absolute;width:145px;height:210px;opacity:.22;transform-origin:bottom center}
+.season-sprig:before{content:"";position:absolute;width:2px;height:185px;left:58px;bottom:0;background:linear-gradient(180deg,transparent,#92795d 18%,#806a54 86%,transparent);transform:rotate(24deg);border-radius:99px}
+.sprig-a{left:-18px;top:11%;transform:rotate(-8deg)}
+.sprig-b{right:-25px;bottom:8%;transform:rotate(174deg);opacity:.17}
+.season-sprig i{position:absolute;width:25px;height:13px;background:linear-gradient(135deg,#8d9a72,#b7aa7c);border-radius:90% 8% 90% 8%;transform-origin:0 50%;opacity:0;animation:leafLife 11s ease-in-out infinite}
+.season-sprig i:nth-child(1){left:47px;top:35px;transform:rotate(-42deg);animation-delay:-1s}
+.season-sprig i:nth-child(2){left:67px;top:72px;transform:rotate(26deg);animation-delay:-3s}
+.season-sprig i:nth-child(3){left:38px;top:108px;transform:rotate(-50deg);animation-delay:-5s}
+.season-sprig i:nth-child(4){left:77px;top:135px;transform:rotate(32deg);animation-delay:-7s}
+.season-sprig i:nth-child(5){left:51px;top:164px;transform:rotate(-34deg);animation-delay:-9s}
+@keyframes leafLife{
+ 0%,10%,100%{opacity:0;filter:saturate(.7);scale:.25}
+ 25%{opacity:.5;filter:saturate(.9);scale:.78}
+ 45%{opacity:.78;filter:saturate(1);scale:1}
+ 70%{opacity:.42;filter:saturate(.65) sepia(.25);scale:.94}
+ 88%{opacity:0;filter:saturate(.4) sepia(.5);scale:.68}
+}
+
+/* A few leaves/petals fall slowly; intentionally sparse, not confetti */
+.season-fall{position:absolute;inset:-12% 0 0}
+.season-particle{--dur:15s;--delay:0s;--drift:30px;--turn:180deg;--size:9px;position:absolute;top:-10%;width:var(--size);height:calc(var(--size) * .58);opacity:0;animation:seasonFall var(--dur) linear var(--delay) infinite;will-change:transform,opacity}
+.season-particle.leaf{background:linear-gradient(135deg,#918b65,#b99569);border-radius:90% 8% 90% 8%}
+.season-particle.petal{background:linear-gradient(135deg,#ead6c7,#cfb19b);border-radius:80% 45% 80% 45%}
+@keyframes seasonFall{
+ 0%{transform:translate3d(0,-30px,0) rotate(0deg);opacity:0}
+ 8%{opacity:.34}
+ 72%{opacity:.27}
+ 100%{transform:translate3d(var(--drift),115vh,0) rotate(var(--turn));opacity:0}
+}
+
+/* Let the seasonal background barely show through the paper */
+.app{background:linear-gradient(180deg,#fbf7efe9 0,#f7f1e7ed 100%);backdrop-filter:blur(1px)}
+
+/* Stronger card entrance + stronger desktop hover */
+.motion-reveal{opacity:0;transform:translateY(34px) scale(.965);filter:blur(1.5px);transition:
+ opacity .72s ease var(--reveal-delay,0ms),
+ transform .72s cubic-bezier(.16,.8,.22,1) var(--reveal-delay,0ms),
+ filter .6s ease var(--reveal-delay,0ms)}
+.motion-reveal.motion-in{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}
+@media (hover:hover) and (pointer:fine){
+ .card:hover,.result-card:hover,.form-page .field:hover{transform:translateY(-7px) scale(1.012);border-color:#cfa77d;box-shadow:0 20px 44px #60472e21}
+ .now-card:hover,.luck-detail:hover{transform:translateY(-5px) scale(1.008);box-shadow:0 20px 42px #3b2b2028}
+ .luck-btn:hover{transform:translateY(-7px) scale(1.045);box-shadow:0 14px 28px #68482f24}
+}
+.card:active,.result-card:active,.luck-btn:active{transform:scale(.985)}
+
+/* Keep the good button shimmer */
+.primary{animation:sajuButtonGlow 5.4s ease-in-out infinite}
+
+@media(max-width:520px){
+ .season-sprig{opacity:.14}
+ .sprig-b{opacity:.11}
+ .season-particle:nth-child(2n){display:none}
+ .motion-reveal{transform:translateY(28px) scale(.97)}
+}
+@media(prefers-reduced-motion:reduce){
+ .season-haze,.season-sprig i,.season-particle{animation:none!important}
+ .season-fall{display:none}
+ .motion-reveal{opacity:1!important;transform:none!important;filter:none!important}
+}
 </style>
 </head>
-<body><div id="sajuSky" class="saju-sky" aria-hidden="true"><div id="sajuStars" class="saju-stars"></div><div class="saju-orb orb-a"></div><div class="saju-orb orb-b"></div><div class="saju-orb orb-c"></div></div><main class="app">
+<body><div id="sajuSeason" class="saju-season" aria-hidden="true">
+<div class="season-haze haze-a"></div><div class="season-haze haze-b"></div>
+<div class="season-sprig sprig-a"><i></i><i></i><i></i><i></i><i></i></div>
+<div class="season-sprig sprig-b"><i></i><i></i><i></i><i></i></div>
+<div id="seasonFall" class="season-fall"></div>
+</div><main class="app">
 <header><div class="logo">사주<b>로움</b></div><small>나를 알아가는 새로운 사주</small></header>
 <section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">태어난 시간과 계절의 흐름을 따라<br>나의 기질과 삶의 방향을 차분히 살펴보세요.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card"><i class="feature-icon">四</i><b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card"><i class="feature-icon">五</i><b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card"><i class="feature-icon">日</i><b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card"><i class="feature-icon">運</i><b>십성·대운</b><span>나와 주변의 관계, 삶의 큰 흐름을 확인</span></div></div></section>
 <section id="form" class="page form-page"><button class="back" onclick="showPage('home')">← 돌아가기</button><div class="form-intro"><span class="step-badge">BIRTH INFO</span><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">정확한 사주 계산을 위해 아래 정보를 입력해주세요.</p></div><div class="field"><label>생일 기준</label><div class="choicegrid"><button class="choice calendar on" onclick="calendarPick(this,false)">양력</button><button class="choice calendar" onclick="calendarPick(this,true)">음력</button></div></div>
@@ -431,21 +510,22 @@ function render(r){
 
 function initSajuMotion(){
  const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
- const stars=document.getElementById('sajuStars');
- if(stars&&!stars.dataset.ready){
-  const count=window.innerWidth<520?34:58;
+ const fall=document.getElementById('seasonFall');
+ if(fall&&!fall.dataset.ready){
+  const count=window.innerWidth<520?10:16;
   for(let i=0;i<count;i++){
-   const s=document.createElement('i');
-   const r=Math.random();
-   s.className='saju-star '+(r>.86?'big':r<.35?'tiny':'');
-   s.style.left=(Math.random()*100)+'%';
-   s.style.top=(Math.random()*100)+'%';
-   s.style.setProperty('--dur',(3.2+Math.random()*5.6)+'s');
-   s.style.setProperty('--delay',(-Math.random()*8)+'s');
-   s.style.setProperty('--drift',((Math.random()*18)-9)+'px');
-   stars.appendChild(s);
+   const p=document.createElement('i');
+   const petal=Math.random()>.58;
+   p.className='season-particle '+(petal?'petal':'leaf');
+   p.style.left=(4+Math.random()*92)+'%';
+   p.style.setProperty('--dur',(10+Math.random()*12)+'s');
+   p.style.setProperty('--delay',(-Math.random()*20)+'s');
+   p.style.setProperty('--drift',((Math.random()*130)-65)+'px');
+   p.style.setProperty('--turn',((Math.random()*440)-220)+'deg');
+   p.style.setProperty('--size',(petal?5+Math.random()*5:7+Math.random()*7)+'px');
+   fall.appendChild(p);
   }
-  stars.dataset.ready='1';
+  fall.dataset.ready='1';
  }
  if(reduced){document.querySelectorAll('.motion-reveal').forEach(el=>el.classList.add('motion-in'));return;}
  if(!window._sajuObserver&&'IntersectionObserver' in window){
@@ -457,7 +537,8 @@ function initSajuMotion(){
   const targets=root.querySelectorAll?.('.card,.result-card,.now-card,.luck-detail,.form-page .field')||[];
   targets.forEach((el,i)=>{
    el.classList.add('motion-reveal');
-   el.style.setProperty('--reveal-delay',Math.min(i*32,180)+'ms');
+   el.classList.remove('motion-in');
+   el.style.setProperty('--reveal-delay',Math.min(i*48,240)+'ms');
    if(reduced||!window._sajuObserver)el.classList.add('motion-in');else window._sajuObserver.observe(el);
   });
  };
