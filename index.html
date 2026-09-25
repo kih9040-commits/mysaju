@@ -95,6 +95,9 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 .signature-box{margin:10px 0 12px;padding:15px 16px;border-radius:15px;background:linear-gradient(135deg,#3d2d24,#6f4a35);color:#fff;box-shadow:0 8px 20px #4c33201a}.signature-box small{display:block;font-size:10px;font-weight:800;letter-spacing:.4px;color:#f0d9c8;margin-bottom:7px}.signature-box b{display:block;font-size:14px;line-height:1.7}
 .fresh-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px}.fresh-grid>div{padding:13px;border-radius:13px;background:#fffaf4;border:1px solid #e7d4be}.fresh-grid .wide{grid-column:1/-1;background:#f2e5d3}.fresh-grid em{display:block;font-style:normal;font-size:10px;font-weight:900;color:#96603f;margin-bottom:6px}.fresh-grid strong{display:block;font-size:12px;line-height:1.58;color:#3f3027}.symbol-note{margin:11px 2px 0;font-size:9.5px;line-height:1.55;color:#918377}
 @media(max-width:360px){.fresh-grid{grid-template-columns:1fr}.fresh-grid .wide{grid-column:auto}}
+
+/* Current-age-first result */
+.current-focus{margin:0 0 16px}.now-card{background:linear-gradient(145deg,#2f251f,#614631);color:#fff;border-radius:22px;padding:20px;box-shadow:0 14px 34px #3d2c201f}.now-kicker{display:block;font-size:9px;font-weight:900;letter-spacing:1.5px;color:#e8c9ae;margin-bottom:11px}.now-title-row{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.now-title-row small{font-size:10px;color:#d9c9bc}.now-title-row h3{font-size:20px!important;line-height:1.35;margin:4px 0 0!important;color:#fff!important}.now-badge{flex:0 0 auto;border-radius:999px;padding:6px 9px;background:#fff1df;color:#69452f;font-size:9px;font-weight:900}.now-main{margin:15px 0 12px;padding:15px;border-radius:15px;background:#ffffff10;border:1px solid #ffffff1f}.now-main b{display:block;font-size:16px;line-height:1.5;margin-bottom:7px}.now-main p{margin:0;font-size:12px;line-height:1.75;color:#eee3db}.now-actions{display:grid;grid-template-columns:1fr;gap:8px}.now-actions>div{padding:13px 14px;border-radius:13px;background:#fffaf3;color:#342922}.now-actions em{display:block;font-style:normal;font-size:10px;font-weight:900;color:#9a603d;margin-bottom:5px}.now-actions strong{display:block;font-size:12px;line-height:1.62}.future-question{margin-top:10px;padding:14px;border-radius:14px;background:#ead4bc;color:#3d2c21}.future-question b{font-size:13px}.future-question p{font-size:11px;line-height:1.65;margin:6px 0 0}.next-luck{margin-top:10px;padding:14px;border-radius:14px;border:1px solid #ffffff2b;background:#ffffff0b}.next-luck small{display:block;color:#d8c4b4;font-size:9px;margin-bottom:5px}.next-luck b{display:block;font-size:13px;margin-bottom:5px}.next-luck span{display:block;font-size:10.5px;line-height:1.6;color:#eee1d8}.jump-luck{width:100%;margin-top:12px;height:44px;border-radius:12px;border:1px solid #ffffff36;background:#ffffff12;color:#fff;font-weight:800;font-size:11px}.luck-scroll{display:flex;gap:8px;overflow-x:auto;padding:5px 2px 10px;scrollbar-width:thin}.luck-btn.current-luck{border:2px solid #8a573b!important;background:#fff3e5!important}.current-badge{display:block;font-style:normal;font-size:8px;font-weight:900;color:#fff;background:#8a573b;border-radius:999px;padding:3px 6px;margin:-4px auto 5px}
 </style>
 </head>
 <body><main class="app">
@@ -112,6 +115,7 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 <button class="primary calc-primary" id="calcBtn" onclick="calculate()">내 사주 결과 보기 <span>→</span></button><div id="formError" class="error"></div></section>
 <section id="loading" class="page"><div class="loading"><div><div class="orbit">命</div><h2>사주팔자를 계산하는 중</h2><p class="desc">절기 기준의 년주·월주와<br>일주·시주를 확인하고 있어요.</p></div></div></section>
 <section id="result" class="page result-page"><button class="back" onclick="showPage('form')">← 다시 입력하기</button><div class="result-head"><small>SAJUROUM · 四柱</small><h2><span id="rname">당신</span>님의 사주</h2><p class="desc" id="summary"></p></div>
+<div id="currentLuckFocus" class="current-focus"></div>
 <div class="result-card pillar-card"><span class="section-kicker">01 · MY FOUR PILLARS</span><span class="real">정밀 만세력 계산</span><h3>四柱 · 나의 사주팔자</h3><div class="pillars"><div class="pillar"><small>시주</small><b id="hHanja">-</b><span id="hKor">-</span></div><div class="pillar"><small>일주</small><b id="dHanja">-</b><span id="dKor">-</span></div><div class="pillar"><small>월주</small><b id="mHanja">-</b><span id="mKor">-</span></div><div class="pillar"><small>년주</small><b id="yHanja">-</b><span id="yKor">-</span></div></div></div>
 <div class="result-card summary-card"><span class="section-kicker">02 · SUMMARY</span><h3>사주 핵심 요약</h3><div id="coreSummary"></div></div>
 <div class="result-card"><span class="section-kicker">03 · ELEMENTS</span><h3>오행 분포</h3><p>사주팔자 여덟 글자의 천간·지지를 각각 하나의 오행으로 세어 표시합니다.</p><div id="bars"></div></div>
@@ -238,6 +242,25 @@ function personalizedLuck(stem,branch,rel){
   weak:weak||'', strong:strong||''
  };
 }
+function getCurrentAge(){
+ const y=Number(document.getElementById('birthYear').value),m=Number(document.getElementById('birthMonth').value),d=Number(document.getElementById('birthDay').value);
+ const now=new Date(); if(!y)return 0;
+ let age=now.getFullYear()-y;
+ if(!isLunar){const beforeBirthday=(now.getMonth()+1<m)||((now.getMonth()+1===m)&&now.getDate()<d);if(beforeBirthday)age--;}
+ return age;
+}
+function luckBundle(x){
+ const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')),stem=p[0],branch=p[1];
+ const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
+ return {x,p,stem,branch,rel,life:luckLifeReading(stem,branch,rel),personal:personalizedLuck(stem,branch,rel)};
+}
+function renderCurrentLuck(index){
+ const box=document.getElementById('currentLuckFocus'),lp=window._luck||[];if(!box)return;
+ if(index<0||!lp[index]){box.innerHTML='<div class="now-card"><span class="now-kicker">NOW · 지금의 흐름</span><h3>현재 연령에 해당하는 대운을 찾지 못했습니다.</h3><p>입력한 생년월일과 대운 시작 시점을 다시 확인해주세요.</p></div>';return;}
+ const cur=luckBundle(lp[index]),next=lp[index+1]?luckBundle(lp[index+1]):null,age=getCurrentAge(),endAge=Number(cur.x.age)+9;
+ const nextText=next?'<div class="next-luck"><small>다음 흐름 미리보기 · '+next.x.age+'~'+(Number(next.x.age)+9)+'세 '+next.p+'</small><b>'+next.life.headline+'</b><span>'+next.personal.signature+'</span></div>':'';
+ box.innerHTML='<div class="now-card"><span class="now-kicker">NOW · 지금의 흐름</span><div class="now-title-row"><div><small>현재 '+age+'세 · '+gender+' 기준</small><h3>'+cur.x.age+'~'+endAge+'세 · '+cur.p+' 대운</h3></div><span class="now-badge">현재 대운</span></div><div class="now-main"><b>'+cur.life.headline+'</b><p>'+cur.personal.signature+'</p></div><div class="now-actions"><div><em>✅ 지금 먼저 할 일</em><strong>'+cur.personal.action+'</strong></div><div><em>🚫 지금 피할 것</em><strong>'+cur.personal.taboo+'</strong></div><div><em>🤝 가까이할 사람</em><strong>'+cur.personal.helper+'</strong></div></div><div class="future-question"><b>앞으로 무엇을 대비할까?</b><p>'+cur.life.change+'</p><p>'+cur.life.caution+'</p></div>'+nextText+'<button class="jump-luck" onclick="document.querySelector(\'.luck-card\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">10년 흐름 전체 보기 ↓</button></div>';
+}
 function luckLifeReading(stem,branch,rel){
  const el=stemEl[stem]||branchEl[branch]||'', types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
  const focus={목:'성장과 확장',화:'성과와 표현',토:'안정과 기반',금:'결단과 재정비',수:'이동과 탐색'}[el]||'변화와 선택';
@@ -274,9 +297,7 @@ window.calendarPick=(el,val)=>{isLunar=val;document.querySelectorAll('.calendar'
 window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
-window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));el.classList.add('on');const p=x.korean||((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||'')), stem=p[0], branch=p[1];
- const rel=[...stemRelations(stem,window._natal||[]),...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
- const life=luckLifeReading(stem,branch,rel),personal=personalizedLuck(stem,branch,rel),endAge=Number(x.age)+9;
+window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));if(el)el.classList.add('on');const b=luckBundle(x),p=b.p,stem=b.stem,branch=b.branch,rel=b.rel,life=b.life,personal=b.personal,endAge=Number(x.age)+9;
  document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="signature-box"><small>내 사주에 대입하면</small><b>'+personal.signature+'</b></div><div class="fresh-grid"><div><em>🚫 이 시기 금기</em><strong>'+personal.taboo+'</strong></div><div><em>🤝 도움되는 사람</em><strong>'+personal.helper+'</strong></div><div><em>🎨 보완 컬러</em><strong>'+personal.color+'</strong></div><div><em>🧿 상징 소품</em><strong>'+personal.item+'</strong></div><div class="wide"><em>✅ 가장 먼저 해볼 것</em><strong>'+personal.action+'</strong></div></div><div class="decade-overview"><b>🔎 이 10년, 현실에서는</b><p>'+life.overview+'</p></div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><div class="symbol-note">※ 컬러·소품은 <b>오행의 단순 개수에서 상대적으로 적은 기운을 상징적으로 보완해보는 재미 요소</b>입니다. 용신·행운색을 확정한 결과는 아닙니다.</div><details class="theory-details"><summary>왜 이렇게 나왔는지 보기</summary><div class="theory-toggle">'+(personal.tenGod?'<div class="tags"><span class="tag">대운 천간 십성 · '+personal.tenGod+'</span></div>':'')+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div></details>'};
 window.toggleUnknownTime=val=>{unknownTime=val;const box=document.getElementById('timeInputs');box.classList.toggle('disabled-time',val);['hour','minute'].forEach(id=>{const el=document.getElementById(id);el.disabled=val;if(val)el.value=''});};
 window.calculate=()=>{
@@ -329,9 +350,12 @@ function render(r){
  '<div class="insight"><b>💕 연애와 결혼</b><p>'+love+'</p></div>'+ '<div class="insight"><b>🤝 인간관계</b><p>'+relation+'</p></div>'+
  '<div class="insight"><b>⚖️ 오행 균형</b><p>'+strongest[0]+' '+strongest[1]+'개, '+weakest[0]+' '+weakest[1]+'개로 집계됩니다. 이 숫자는 표면의 여덟 글자를 센 값이며, 신강·신약·용신은 월령과 지장간 등 추가 조건 없이 확정하지 않습니다.</p></div>';
  if(luck){const precise=(Number.isInteger(luck.startYears)?' · 세부 '+luck.startYears+'년 '+luck.startMonths+'개월 '+luck.startDays+'일':'');document.getElementById('luckMeta').textContent=(luck.forward?'순행':'역행')+' · 대운 시작 약 '+luck.startAge+'세'+precise;
- const lp=luck.pillars||[];
- document.getElementById('luckPillars').innerHTML='<div style="display:flex;gap:7px;overflow-x:auto;padding-bottom:5px">'+lp.map((x,i)=>'<button class="pillar luck-btn" style="min-width:72px;background:var(--paper)" onclick="showLuck('+i+',this)"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail">대운 카드를 누르면 해당 10년 흐름의 기본 정보를 볼 수 있습니다.</div>';
- window._luck=lp;}else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';}
- showPage('result')
+ const lp=luck.pillars||[],currentAge=getCurrentAge(),currentIndex=lp.findIndex(x=>currentAge>=Number(x.age)&&currentAge<=Number(x.age)+9);
+ window._luck=lp;
+ document.getElementById('luckPillars').innerHTML='<div class="luck-scroll">'+lp.map((x,i)=>'<button class="pillar luck-btn '+(i===currentIndex?'current-luck':'')+'" style="min-width:82px;background:var(--paper)" onclick="showLuck('+i+',this)">'+(i===currentIndex?'<em class="current-badge">지금</em>':'')+'<small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail">궁금한 대운을 누르면 해당 10년의 <b>일·돈·연애·변화 포인트</b>를 확인할 수 있습니다.</div>';
+ renderCurrentLuck(currentIndex);
+ showPage('result');
+ if(currentIndex>=0){requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[currentIndex];if(btn){btn.scrollIntoView({block:'nearest',inline:'center'});showLuck(currentIndex,btn);}});}
+ }else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';document.getElementById('currentLuckFocus').innerHTML='';showPage('result');}
 }
 </script></body></html>
