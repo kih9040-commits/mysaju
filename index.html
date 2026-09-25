@@ -283,7 +283,7 @@ body{position:relative;overflow-x:hidden;background:
 /* Result mobile navigation */
 .result-nav{display:flex;gap:7px;overflow-x:auto;margin:-8px 0 14px;padding:3px 1px 8px;scrollbar-width:none}.result-nav::-webkit-scrollbar{display:none}.result-nav button{flex:0 0 auto;border:1px solid #decdb9;background:#fffaf3;color:#604c3e;border-radius:999px;padding:8px 12px;font-size:10px;font-weight:800;cursor:pointer;transition:.18s}.result-nav button:active{transform:scale(.97)}
 .yearly-basis{font-size:9.5px!important;line-height:1.55!important;color:#948579!important;margin:12px 1px 0!important}
-#overallSection,#currentLuckFocus,#yearlySection,#monthlySection,#questionSection,#luckSection,#detailSection{scroll-margin-top:86px}
+#overallSection,#currentLuckFocus,#yearlySection,#monthlySection,#questionSection,#luckSection,#snapshotSection,#detailSection{scroll-margin-top:86px}
 @media(hover:hover) and (pointer:fine){.result-nav button:hover{background:#f0e2d1;border-color:#bd9673}}
 
 /* Explore-more final hub */
@@ -299,6 +299,16 @@ body{position:relative;overflow-x:hidden;background:
 .month-scroll{display:flex;gap:7px;overflow-x:auto;padding:2px 1px 10px;scrollbar-width:thin}.month-btn{flex:0 0 76px;min-height:76px;border:1px solid #dfcdb7;border-radius:13px;background:#fffaf4;color:#44352c;padding:9px 6px;cursor:pointer;transition:.18s}.month-btn small{display:block;height:12px;font-size:8px;font-weight:900;color:#a36d49}.month-btn b{display:block;font-size:16px;margin:2px 0}.month-btn span{display:block;font-size:8.5px;line-height:1.35;color:#847165}.month-btn.on{background:#3e3027;color:#fff;border-color:#3e3027;box-shadow:0 7px 17px #4e37251b}.month-btn.on small,.month-btn.on span{color:#ead4c0}
 .month-detail{margin-top:4px;padding:16px;border-radius:15px;background:#f8f1e7;border:1px solid #e2d1bd}.month-detail-head small{display:block;font-size:9.5px;font-weight:800;color:#97613f;margin-bottom:5px;line-height:1.5}.month-detail-head b{display:block;font-size:17px;color:#352920}.month-signal{margin:11px 0;padding:12px;border-radius:12px;background:#fffaf4;border-left:3px solid #aa714d;font-size:12px;line-height:1.65;color:#5c4d42}.month-advice{display:grid;grid-template-columns:1fr 1fr;gap:8px}.month-advice>div{padding:12px;border-radius:12px;background:#fffaf4;border:1px solid #e7d6c2}.month-advice>div:last-child{grid-column:1/-1}.month-advice em{display:block;font-style:normal;font-size:10px;font-weight:900;color:#95603f;margin-bottom:5px}.month-advice strong{display:block;font-size:11.5px;line-height:1.6;color:#44362e}
 @media(max-width:360px){.month-advice{grid-template-columns:1fr}.month-advice>div:last-child{grid-column:auto}}
+
+/* Shareable saju snapshot */
+.snapshot-section{background:linear-gradient(155deg,#fffdf8,#f3e5d4)}.snapshot-intro{font-size:12px!important;line-height:1.7!important;margin:-2px 0 14px!important;color:#6f5e52!important}
+.snapshot-card{overflow:hidden;border-radius:18px;background:#3b2e27;color:#fff;box-shadow:0 14px 34px #4933241b}.snapshot-brand{display:flex;justify-content:space-between;align-items:center;padding:15px 16px;border-bottom:1px solid #ffffff18}.snapshot-brand span{font-size:9px;font-weight:900;letter-spacing:.12em;color:#e8cdb4}.snapshot-brand small{font-size:8.5px;color:#cdbbaa}
+.snapshot-name{padding:19px 17px 17px;background:linear-gradient(135deg,#49372d,#342923)}.snapshot-name small{display:block;font-size:9px;color:#d9c6b5}.snapshot-name b{display:inline-block;font-size:30px;margin:5px 9px 0 0}.snapshot-name span{font-size:11px;color:#ead6c2}
+.snapshot-lines{padding:9px 15px}.snapshot-lines>div{display:grid;grid-template-columns:45px 1fr;gap:8px;padding:10px 0;border-bottom:1px solid #ffffff12}.snapshot-lines>div:last-child{border-bottom:0}.snapshot-lines em{font-style:normal;font-size:9px;font-weight:900;color:#d9b793}.snapshot-lines strong{font-size:11.2px;line-height:1.55;color:#f7eee8}
+.snapshot-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:5px 15px 15px}.snapshot-actions>div{padding:11px;border-radius:12px;background:#ffffff0d;border:1px solid #ffffff12}.snapshot-actions em{display:block;font-style:normal;font-size:9px;font-weight:900;color:#e1bd98;margin-bottom:5px}.snapshot-actions strong{display:block;font-size:10.5px;line-height:1.55;color:#fff7f0}.snapshot-privacy{padding:10px 15px;background:#2f251f;font-size:8.5px;color:#bdaea2;text-align:center}
+.share-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:10px}.share-actions button{min-height:43px;border:1px solid #d8c1a8;border-radius:11px;background:#fffaf3;color:#503d31;font-size:10.5px;font-weight:900;cursor:pointer}.share-status{min-height:20px;padding-top:7px;text-align:center;font-size:9.5px;color:#8b694f;font-weight:700}
+@media(max-width:360px){.snapshot-actions{grid-template-columns:1fr}.share-actions{grid-template-columns:1fr}.share-actions button{min-height:40px}}
+@media(hover:hover) and (pointer:fine){.share-actions button:hover{background:#f1e1cf;border-color:#bd9571}}
 </style>
 </head>
 <body><div id="sajuSeason" class="saju-season" aria-hidden="true">
@@ -333,7 +343,8 @@ body{position:relative;overflow-x:hidden;background:
 <div id="monthlySection" class="result-card monthly-card"><span class="section-kicker">07 · MONTHLY FLOW</span><h3>올해 12개월 흐름</h3><p class="monthly-intro">같은 해 안에서도 절기가 바뀔 때마다 월의 기운이 달라집니다. <b>지금부터 언제 움직이고, 언제 점검할지</b> 월별로 살펴보세요.</p><div id="monthlyFlow"></div><p class="monthly-basis">※ 월운은 양력 1일이 아니라 <b>절기(소한·입춘·경칩 등)가 시작되는 시점</b>을 기준으로 봅니다. 아래 날짜는 각 월운이 시작되는 절입일을 표시합니다.</p></div>
 <div id="questionSection" class="result-card question-card"><span class="section-kicker">08 · QUESTIONS</span><h3>지금 가장 궁금한 것</h3><p class="question-intro">사주를 보는 이유는 결국 “그래서 지금 어떻게 해야 하지?”에 답을 찾기 위해서니까요. 궁금한 질문을 눌러보세요.</p><div id="questionFlow"></div></div>
 <div id="luckSection" class="result-card luck-card"><span class="section-kicker">09 · LIFE CYCLE</span><h3>대운 흐름</h3><p class="luck-why"><b>왜 10년씩 보나요?</b><br>대운은 약 10년 단위로 삶의 큰 방향이 어떻게 달라지는지를 살펴보는 방식입니다. <strong>직업·돈·관계·환경 변화 중 무엇이 중요해지는지</strong> 비교해보세요.</p><div class="tap-guide"><b>👇 궁금한 10년을 눌러보세요</b><span>각 시기의 핵심 주제와 일·돈·연애·변화 포인트를 바로 보여드립니다.</span></div><details class="calc-basis"><summary>계산 기준 보기</summary><p id="luckMeta"></p></details><div id="luckPillars"></div></div>
-<div id="detailSection" class="result-card next-card"><span class="section-kicker">10 · EXPLORE MORE</span><h3>더 궁금한 이야기가 있나요?</h3><p class="next-intro">지금까지 본 결과에서 끝내지 말고, 내가 가장 궁금한 주제를 골라 다시 살펴보세요. 현재 사주 흐름에 맞춰 먼저 볼 만한 포인트도 함께 보여드립니다.</p><div id="nextTopics"></div><div id="detailReading" hidden></div></div>
+<div id="snapshotSection" class="result-card snapshot-section"><span class="section-kicker">10 · MY SAJU CARD</span><h3>내 사주 한눈에 보기</h3><p class="snapshot-intro">긴 풀이에서 핵심만 뽑아 한 장으로 정리했습니다. 생년월일과 출생시간은 공유 카드에 넣지 않습니다.</p><div id="sajuSnapshot"></div></div>
+<div id="detailSection" class="result-card next-card"><span class="section-kicker">11 · EXPLORE MORE</span><h3>더 궁금한 이야기가 있나요?</h3><p class="next-intro">지금까지 본 결과에서 끝내지 말고, 내가 가장 궁금한 주제를 골라 다시 살펴보세요. 현재 사주 흐름에 맞춰 먼저 볼 만한 포인트도 함께 보여드립니다.</p><div id="nextTopics"></div><div id="detailReading" hidden></div></div>
 
 <button class="primary" onclick="showPage('form')">다른 사주 계산하기</button></section>
 </main>
@@ -659,6 +670,91 @@ function renderNextTopics(){
  ];
  host.innerHTML='<div class="next-topic-grid">'+topics.map(([type,icon,title,sub])=>'<button class="next-topic" onclick="goNextTopic(\''+type+'\')"><span class="next-icon">'+icon+'</span><span class="next-copy"><b>'+title+'</b><small>'+sub+'</small><em>'+nextTopicPreview(type)+'</em></span><i>→</i></button>').join('')+'</div><div class="next-ending"><b>사주는 답을 정해주는 것이 아니라,<br>내 선택을 조금 더 선명하게 보는 도구입니다.</b><span>궁금한 주제를 눌러 필요한 부분만 다시 살펴보세요.</span></div>';
 }
+function buildSajuSnapshot(){
+ const p=window._profile||{},name=(document.getElementById('name').value.trim()||'당신'),cur=currentLuckBundle(),yearNum=new Date().getFullYear();
+ const year=p.dayStem?yearlyBundle(yearNum):null,month=p.dayStem?monthFlowBundle(yearNum,new Date().getMonth()+1):null;
+ const axis=p.tenAxis?.top?.[0]||'',axisInfo=axis&&tenGroupText[axis]?tenGroupText[axis]:null;
+ const dm=p.dayStem?(names[p.dayStem]||p.dayStem):'미확정';
+ const action=cur?.personal?.action||year?.doText||'지금 가장 중요한 한 가지를 정해 꾸준히 실행하기';
+ const taboo=cur?.personal?.taboo||year?.avoid||'감정이 앞선 큰 결정을 서두르는 것';
+ const luckText=cur?(cur.p+' 대운 · '+cur.life.headline.replace('이 10년의 핵심은 ','').replace(/[‘’]/g,'')):(window._limitedUnknown?'출생시간 미상 · 공통 흐름 중심':'현재 대운 확인 필요');
+ const yearText=year?(yearNum+'년 · '+year.theme):'연도별 흐름은 출생시간 확인 후 제공';
+ const monthText=month?(month.month+'월 · '+month.theme):'월운은 출생시간 확인 후 제공';
+ return {name,dm,axis,axisTitle:axisInfo?.title||'균형형',luckText,yearText,monthText,action,taboo,limited:!!window._limitedUnknown};
+}
+function snapshotShareText(s){
+ return '[사주로움] '+s.name+'님의 사주 한눈에 보기\n'+
+ '• 일간: '+s.dm+'\n'+
+ '• 중심축: '+(s.axis?s.axis+' · '+s.axisTitle:'공통 결과 중심')+'\n'+
+ '• 현재 흐름: '+s.luckText+'\n'+
+ '• 올해: '+s.yearText+'\n'+
+ '• 지금 할 일: '+s.action+'\n'+
+ '• 피할 것: '+s.taboo+'\n\n'+
+ '사주 해석은 선택을 돕는 참고용 설명입니다.';
+}
+function copyTextFallback(text){
+ const ta=document.createElement('textarea');ta.value=text;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();
+ try{document.execCommand('copy')}catch(e){}
+ ta.remove();
+}
+function setShareStatus(msg){
+ const el=document.getElementById('shareStatus');if(!el)return;el.textContent=msg;clearTimeout(window._shareTimer);window._shareTimer=setTimeout(()=>{el.textContent='';},2600);
+}
+window.copySajuSummary=async()=>{
+ const s=window._sajuSnapshot||buildSajuSnapshot(),text=snapshotShareText(s);
+ try{if(navigator.clipboard&&window.isSecureContext)await navigator.clipboard.writeText(text);else copyTextFallback(text);setShareStatus('요약 내용을 복사했어요.');}
+ catch(e){copyTextFallback(text);setShareStatus('요약 내용을 복사했어요.');}
+};
+window.shareSaju=async()=>{
+ const s=window._sajuSnapshot||buildSajuSnapshot(),text=snapshotShareText(s),url=location.origin+location.pathname;
+ if(navigator.share){
+  try{await navigator.share({title:'사주로움 · 내 사주 한눈에 보기',text,url});return}catch(e){if(e?.name==='AbortError')return;}
+ }
+ await window.copySajuSummary();setShareStatus('공유 기능 대신 요약 내용을 복사했어요.');
+};
+function wrapCanvasText(ctx,text,x,y,maxWidth,lineHeight,maxLines=4){
+ const chars=[...String(text)],lines=[],buf=[];
+ for(const ch of chars){const test=buf.join('')+ch;if(ctx.measureText(test).width>maxWidth&&buf.length){lines.push(buf.join(''));buf.length=0;if(lines.length>=maxLines)break;}buf.push(ch);}
+ if(lines.length<maxLines&&buf.length)lines.push(buf.join(''));
+ lines.slice(0,maxLines).forEach((line,i)=>ctx.fillText(line,x,y+i*lineHeight));
+ return y+Math.min(lines.length,maxLines)*lineHeight;
+}
+function roundRect(ctx,x,y,w,h,r,fill){
+ ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fillStyle=fill;ctx.fill();
+}
+window.saveSajuImage=()=>{
+ const s=window._sajuSnapshot||buildSajuSnapshot(),canvas=document.createElement('canvas');canvas.width=1080;canvas.height=1350;
+ const ctx=canvas.getContext('2d');ctx.fillStyle='#f6efe5';ctx.fillRect(0,0,1080,1350);
+ const g=ctx.createLinearGradient(0,0,1080,1350);g.addColorStop(0,'#fffaf2');g.addColorStop(1,'#eadcc8');ctx.fillStyle=g;ctx.fillRect(54,54,972,1242);
+ ctx.fillStyle='#805c43';ctx.font='700 30px sans-serif';ctx.fillText('SAJUROUM · 四柱',96,120);
+ ctx.fillStyle='#2f2823';ctx.font='900 56px sans-serif';ctx.fillText(s.name+'님의 사주',96,190);
+ ctx.fillStyle='#8a7768';ctx.font='400 26px sans-serif';ctx.fillText('나를 알아가는 새로운 사주',96,232);
+ roundRect(ctx,96,285,888,170,30,'#3b2e27');
+ ctx.fillStyle='#ead8c6';ctx.font='700 24px sans-serif';ctx.fillText('나를 나타내는 일간',132,335);
+ ctx.fillStyle='#ffffff';ctx.font='900 58px sans-serif';ctx.fillText(s.dm,132,405);
+ ctx.fillStyle='#d9c5b4';ctx.font='600 25px sans-serif';ctx.fillText(s.axis?'중심축  '+s.axis+' · '+s.axisTitle:'출생시간 미상 · 공통 분석',470,386);
+ const cards=[
+  ['지금의 흐름',s.luckText],
+  ['올해의 흐름',s.yearText],
+  ['이번 달',s.monthText],
+  ['지금 먼저 할 일',s.action],
+  ['지금 피할 것',s.taboo]
+ ];
+ let y=495;
+ cards.forEach(([title,body],idx)=>{
+  const h=idx<3?132:154;roundRect(ctx,96,y,888,h,24,'#fffaf4');
+  ctx.fillStyle='#95613f';ctx.font='800 22px sans-serif';ctx.fillText(title,128,y+38);
+  ctx.fillStyle='#40342c';ctx.font='700 27px sans-serif';wrapCanvasText(ctx,body,128,y+78,820,36,2);y+=h+18;
+ });
+ ctx.fillStyle='#8d7d71';ctx.font='400 19px sans-serif';ctx.fillText('생년월일·출생시간은 카드에 포함하지 않았습니다.',96,1270);
+ ctx.fillStyle='#49382d';ctx.font='700 21px sans-serif';ctx.textAlign='right';ctx.fillText('사주로움',984,1270);ctx.textAlign='left';
+ const a=document.createElement('a');a.download='sajurowoom-summary.png';a.href=canvas.toDataURL('image/png');a.click();setShareStatus('요약 이미지를 만들었어요.');
+};
+function renderSajuSnapshot(){
+ const host=document.getElementById('sajuSnapshot');if(!host)return;
+ const s=buildSajuSnapshot();window._sajuSnapshot=s;
+ host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+s.name+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
+}
 function luckLifeReading(stem,branch,rel){
  const el=stemEl[stem]||branchEl[branch]||'', types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
  const focus={목:'성장과 확장',화:'성과와 표현',토:'안정과 기반',금:'결단과 재정비',수:'이동과 탐색'}[el]||'변화와 선택';
@@ -774,6 +870,7 @@ function renderUnknown(samples){
    document.getElementById('currentLuckFocus').innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 시간 미상</span><h3>공통으로 확인되는 사주부터 보여드려요.</h3><p>현재 흐름의 세부 시점을 단정하지 않고, 시간과 관계없이 동일한 기둥과 성향만 표시합니다.</p></div>';
    if(d){renderYearlyFlow();renderMonthlyFlow();renderQuestions();}else{document.getElementById('yearlyFlow').innerHTML='<div class="year-detail">출생시간에 따라 일간이 달라질 수 있어 연도별 십성 해석은 확정하지 않습니다.</div>';document.getElementById('monthlyFlow').innerHTML='<div class="month-detail">출생시간에 따라 일간이 달라질 수 있어 월별 십성 해석은 확정하지 않습니다.</div>';document.getElementById('questionFlow').innerHTML='<div class="question-answer">출생시간에 따라 일간이 달라질 수 있어 질문형 현재 해석은 확정하지 않습니다.</div>';}
  }
+ renderSajuSnapshot();
  renderNextTopics();
  showPage('result');window.scrollTo({top:0,left:0,behavior:'auto'});
 }
@@ -897,10 +994,11 @@ function render(r){
  renderYearlyFlow();
  renderMonthlyFlow();
  renderQuestions();
+ renderSajuSnapshot();
  renderNextTopics();
  showPage('result');
  if(currentIndex>=0){requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[currentIndex];if(btn){showLuck(currentIndex,btn);const row=btn.closest('.luck-scroll');if(row)row.scrollLeft=Math.max(0,btn.offsetLeft-row.clientWidth/2+btn.clientWidth/2);}window.scrollTo({top:0,left:0,behavior:'auto'});});}
- }else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';document.getElementById('currentLuckFocus').innerHTML='';renderYearlyFlow();renderMonthlyFlow();renderQuestions();renderNextTopics();showPage('result');}
+ }else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';document.getElementById('currentLuckFocus').innerHTML='';renderYearlyFlow();renderMonthlyFlow();renderQuestions();renderSajuSnapshot();renderNextTopics();showPage('result');}
 }
 
 function initSajuMotion(){
