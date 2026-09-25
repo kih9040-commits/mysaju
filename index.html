@@ -355,7 +355,7 @@ function render(r){
  document.getElementById('luckPillars').innerHTML='<div class="luck-scroll">'+lp.map((x,i)=>'<button class="pillar luck-btn '+(i===currentIndex?'current-luck':'')+'" style="min-width:82px;background:var(--paper)" onclick="showLuck('+i+',this)">'+(i===currentIndex?'<em class="current-badge">지금</em>':'')+'<small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail">궁금한 대운을 누르면 해당 10년의 <b>일·돈·연애·변화 포인트</b>를 확인할 수 있습니다.</div>';
  renderCurrentLuck(currentIndex);
  showPage('result');
- if(currentIndex>=0){requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[currentIndex];if(btn){btn.scrollIntoView({block:'nearest',inline:'center'});showLuck(currentIndex,btn);}});}
+ if(currentIndex>=0){requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[currentIndex];if(btn){showLuck(currentIndex,btn);const row=btn.closest('.luck-scroll');if(row)row.scrollLeft=Math.max(0,btn.offsetLeft-row.clientWidth/2+btn.clientWidth/2);}window.scrollTo({top:0,left:0,behavior:'auto'});});}
  }else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';document.getElementById('currentLuckFocus').innerHTML='';showPage('result');}
 }
 </script></body></html>
