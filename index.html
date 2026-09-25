@@ -309,6 +309,11 @@ body{position:relative;overflow-x:hidden;background:
 .share-actions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-top:10px}.share-actions button{min-height:43px;border:1px solid #d8c1a8;border-radius:11px;background:#fffaf3;color:#503d31;font-size:10.5px;font-weight:900;cursor:pointer}.share-status{min-height:20px;padding-top:7px;text-align:center;font-size:9.5px;color:#8b694f;font-weight:700}
 @media(max-width:360px){.snapshot-actions{grid-template-columns:1fr}.share-actions{grid-template-columns:1fr}.share-actions button{min-height:40px}}
 @media(hover:hover) and (pointer:fine){.share-actions button:hover{background:#f1e1cf;border-color:#bd9571}}
+
+/* Local saved saju */
+.saved-home{margin:-18px 0 28px;padding:13px;border-radius:16px;background:#fffaf3;border:1px solid #ddc8b0;text-align:left;box-shadow:0 10px 26px #5c422b10}.saved-home-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}.saved-home-head span{font-size:9.5px;font-weight:900;letter-spacing:.08em;color:#956242}.saved-home-head button{border:0;background:none;color:#a18e7f;font-size:9px;padding:5px;cursor:pointer}.saved-open{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;border:0;border-radius:12px;background:#3b2e27;color:#fff;padding:13px 14px;text-align:left;cursor:pointer}.saved-open span{min-width:0}.saved-open b{display:block;font-size:13px;color:#fff3e9}.saved-open small{display:block;margin-top:4px;font-size:9px;color:#ccb9a9}.saved-open i{font-style:normal;white-space:nowrap;font-size:10px;color:#e1bd98;font-weight:800}.saved-home p{margin:8px 3px 0!important;font-size:8.5px!important;line-height:1.45!important;color:#948579!important}
+.saved-result-action{display:flex;align-items:center;gap:9px;margin-top:9px}.save-result{flex:0 0 auto;min-height:43px;border:1px solid #9a6847;border-radius:11px;background:#3b2e27;color:#fff7ef;padding:0 15px;font-size:10.5px;font-weight:900;cursor:pointer}.save-result.saved{background:#efe2d1;color:#624936;border-color:#c7a17f}.saved-result-action span{font-size:8.8px;line-height:1.45;color:#968476}
+@media(hover:hover) and (pointer:fine){.saved-open:hover{transform:translateY(-1px);box-shadow:0 9px 20px #4934251a}.save-result:hover{filter:brightness(1.06)}}
 </style>
 </head>
 <body><div id="sajuSeason" class="saju-season" aria-hidden="true">
@@ -753,7 +758,8 @@ window.saveSajuImage=()=>{
 function renderSajuSnapshot(){
  const host=document.getElementById('sajuSnapshot');if(!host)return;
  const s=buildSajuSnapshot();window._sajuSnapshot=s;
- host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+s.name+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
+ host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+s.name+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="savedResultAction" class="saved-result-action"></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
+ updateSaveButton();
 }
 
 const SAVED_SAJU_KEY='sajurowoom.savedProfile.v1';
@@ -1123,5 +1129,6 @@ function initSajuMotion(){
  };
  window.refreshSajuMotion(document.querySelector('.page.on')||document);
 }
+renderSavedHome();
 initSajuMotion();
 </script></body></html>
