@@ -98,9 +98,79 @@ h1{font-size:36px;line-height:1.32}.lead{font-size:14px}.primary{border-radius:1
 
 /* Current-age-first result */
 .current-focus{margin:0 0 16px}.now-card{background:linear-gradient(145deg,#2f251f,#614631);color:#fff;border-radius:22px;padding:20px;box-shadow:0 14px 34px #3d2c201f}.now-kicker{display:block;font-size:9px;font-weight:900;letter-spacing:1.5px;color:#e8c9ae;margin-bottom:11px}.now-title-row{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}.now-title-row small{font-size:10px;color:#d9c9bc}.now-title-row h3{font-size:20px!important;line-height:1.35;margin:4px 0 0!important;color:#fff!important}.now-badge{flex:0 0 auto;border-radius:999px;padding:6px 9px;background:#fff1df;color:#69452f;font-size:9px;font-weight:900}.now-main{margin:15px 0 12px;padding:15px;border-radius:15px;background:#ffffff10;border:1px solid #ffffff1f}.now-main b{display:block;font-size:16px;line-height:1.5;margin-bottom:7px}.now-main p{margin:0;font-size:12px;line-height:1.75;color:#eee3db}.now-actions{display:grid;grid-template-columns:1fr;gap:8px}.now-actions>div{padding:13px 14px;border-radius:13px;background:#fffaf3;color:#342922}.now-actions em{display:block;font-style:normal;font-size:10px;font-weight:900;color:#9a603d;margin-bottom:5px}.now-actions strong{display:block;font-size:12px;line-height:1.62}.future-question{margin-top:10px;padding:14px;border-radius:14px;background:#ead4bc;color:#3d2c21}.future-question b{font-size:13px}.future-question p{font-size:11px;line-height:1.65;margin:6px 0 0}.next-luck{margin-top:10px;padding:14px;border-radius:14px;border:1px solid #ffffff2b;background:#ffffff0b}.next-luck small{display:block;color:#d8c4b4;font-size:9px;margin-bottom:5px}.next-luck b{display:block;font-size:13px;margin-bottom:5px}.next-luck span{display:block;font-size:10.5px;line-height:1.6;color:#eee1d8}.jump-luck{width:100%;margin-top:12px;height:44px;border-radius:12px;border:1px solid #ffffff36;background:#ffffff12;color:#fff;font-weight:800;font-size:11px}.luck-scroll{display:flex;gap:8px;overflow-x:auto;padding:5px 2px 10px;scrollbar-width:thin}.luck-btn.current-luck{border:2px solid #8a573b!important;background:#fff3e5!important}.current-badge{display:block;font-style:normal;font-size:8px;font-weight:900;color:#fff;background:#8a573b;border-radius:999px;padding:3px 6px;margin:-4px auto 5px}
+
+/* =========================================================
+   SAJUROUM · AMBIENT MOTION SYSTEM
+   아이보리/브라운 무드를 유지하면서 별빛·광택·hover 생동감 추가
+   ========================================================= */
+body{position:relative;overflow-x:hidden;background:
+ radial-gradient(circle at 14% 8%,#f5dfbe55 0,transparent 24%),
+ radial-gradient(circle at 88% 22%,#cfad8050 0,transparent 21%),
+ radial-gradient(circle at 52% 88%,#f0d5ad38 0,transparent 27%),
+ linear-gradient(180deg,#eee9df 0,#e7dfd3 100%)}
+.saju-sky{position:fixed;inset:0;overflow:hidden;pointer-events:none;z-index:0}
+.saju-stars{position:absolute;inset:0}
+.saju-star{--dur:5s;--delay:0s;--drift:0px;position:absolute;width:2px;height:2px;border-radius:50%;background:#c29563;opacity:.34;box-shadow:0 0 8px #d5b17a99;animation:sajuTwinkle var(--dur) ease-in-out var(--delay) infinite}
+.saju-star.tiny{width:1px;height:1px;opacity:.25}.saju-star.big{width:3px;height:3px;opacity:.58;box-shadow:0 0 11px #c89354bb,0 0 22px #e4c89d66}
+@keyframes sajuTwinkle{0%,100%{opacity:.16;transform:translate3d(0,0,0) scale(.75)}38%{opacity:.7;transform:translate3d(var(--drift),-7px,0) scale(1.3)}65%{opacity:.32;transform:translate3d(calc(var(--drift) * -.35),4px,0) scale(.9)}}
+.saju-orb{position:absolute;border-radius:50%;filter:blur(50px);opacity:.18;animation:sajuFloat 15s ease-in-out infinite}
+.orb-a{width:260px;height:260px;left:-90px;top:8%;background:#e6c58f}.orb-b{width:310px;height:310px;right:-120px;top:43%;background:#cda576;animation-delay:-5s}.orb-c{width:230px;height:230px;left:22%;bottom:-90px;background:#f0d8b3;animation-delay:-10s}
+@keyframes sajuFloat{0%,100%{transform:translate3d(0,0,0)}33%{transform:translate3d(16px,-14px,0)}66%{transform:translate3d(-9px,12px,0)}}
+.app{position:relative;z-index:1;background:linear-gradient(180deg,#fbf7eff2 0,#f7f1e7f4 100%);backdrop-filter:blur(1.5px)}
+
+/* Main CTA: subtle moving sheen, stronger hover, satisfying press */
+.primary{position:relative;overflow:hidden;isolation:isolate;background:linear-gradient(112deg,#302b26 0%,#211d1a 31%,#604b3b 49%,#211d1a 67%,#302b26 100%);background-size:240% 100%;animation:sajuButtonGlow 5.4s ease-in-out infinite;box-shadow:0 12px 28px #2d292427,0 0 0 1px #ffffff0c;transition:transform .22s ease,box-shadow .22s ease,filter .22s ease}
+@keyframes sajuButtonGlow{0%,68%,100%{background-position:100% 0}82%{background-position:0 0}}
+.primary:active{transform:translateY(1px) scale(.99)}
+.primary:focus-visible,.choice:focus-visible,.luck-btn:focus-visible,.jump-luck:focus-visible{outline:3px solid #cda77c66;outline-offset:3px}
+
+/* Key cards breathe very slightly; hover only for devices that truly hover */
+.card,.result-card,.now-card,.luck-detail,.form-page .field{transition:transform .24s ease,box-shadow .24s ease,border-color .24s ease,filter .24s ease}
+@media (hover:hover) and (pointer:fine){
+ .primary:hover{transform:translateY(-3px) scale(1.008);filter:brightness(1.06);box-shadow:0 18px 38px #2d292434,0 0 28px #c7a0702b}
+ .card:hover,.result-card:hover,.form-page .field:hover{transform:translateY(-3px);border-color:#d4b58f;box-shadow:0 14px 34px #60472e16}
+ .luck-btn:hover{transform:translateY(-4px) scale(1.025);border-color:#b78359!important;box-shadow:0 10px 22px #68482f1b}
+ .jump-luck:hover{background:#ffffff20;transform:translateY(-1px)}
+}
+
+/* Current luck gets a premium 'alive' highlight without becoming neon */
+.now-card{position:relative;overflow:hidden}
+.now-card:before{content:"";position:absolute;inset:-2px;border-radius:24px;background:linear-gradient(115deg,transparent 18%,#ffe2b526 43%,#fff8e944 50%,#ffe2b526 57%,transparent 82%);transform:translateX(-120%);animation:sajuNowSweep 7s ease-in-out infinite;pointer-events:none}
+@keyframes sajuNowSweep{0%,62%{transform:translateX(-120%)}78%{transform:translateX(120%)}100%{transform:translateX(120%)}}
+.now-badge{box-shadow:0 0 0 1px #fff3,0 0 18px #f0ca9366;animation:sajuBadgePulse 2.8s ease-in-out infinite}
+@keyframes sajuBadgePulse{50%{box-shadow:0 0 0 4px #f3d4ab16,0 0 24px #e8ba7d70}}
+
+/* Fortune seal: quiet halo */
+.seal{animation:sajuSeal 5s ease-in-out infinite}
+@keyframes sajuSeal{0%,100%{box-shadow:0 18px 45px #76563c1a,inset 0 0 0 7px #fffaf2}50%{box-shadow:0 20px 52px #9d74472a,0 0 28px #c9aa8350,inset 0 0 0 7px #fffaf2}}
+
+/* Reveal cards as users scroll */
+.motion-reveal{opacity:0;transform:translateY(16px);transition:opacity .58s ease var(--reveal-delay,0ms),transform .58s cubic-bezier(.2,.75,.25,1) var(--reveal-delay,0ms)}
+.motion-reveal.motion-in{opacity:1;transform:none}
+
+/* Luck buttons feel clickable even before hover */
+.luck-btn{box-shadow:0 5px 14px #69492f10}
+.luck-btn.current-luck{box-shadow:0 8px 22px #8a573b24,0 0 0 3px #d7b18a1c}
+.current-badge{animation:sajuBadgePulse 2.8s ease-in-out infinite}
+
+/* Small tactile effect on choice buttons */
+.choice{transition:transform .18s ease,background .18s ease,border-color .18s ease,box-shadow .18s ease}
+.choice:active,.luck-btn:active{transform:scale(.975)}
+
+/* Keep motion comfortable and battery-friendly */
+@media(max-width:520px){
+ .saju-star:nth-child(3n){display:none}
+ .saju-orb{opacity:.12;filter:blur(58px)}
+ .primary{animation-duration:6.4s}
+}
+@media(prefers-reduced-motion:reduce){
+ .saju-star,.saju-orb,.primary,.seal,.now-card:before,.now-badge,.current-badge{animation:none!important}
+ .motion-reveal{opacity:1!important;transform:none!important;transition:none!important}
+ .card,.result-card,.now-card,.luck-detail,.form-page .field,.primary,.choice,.luck-btn{transition:none!important}
+}
 </style>
 </head>
-<body><main class="app">
+<body><div id="sajuSky" class="saju-sky" aria-hidden="true"><div id="sajuStars" class="saju-stars"></div><div class="saju-orb orb-a"></div><div class="saju-orb orb-b"></div><div class="saju-orb orb-c"></div></div><main class="app">
 <header><div class="logo">사주<b>로움</b></div><small>나를 알아가는 새로운 사주</small></header>
 <section id="home" class="page on home"><div class="seal">命</div><h1>태어난 순간에 담긴<br><em>나만의 이야기</em></h1><p class="lead">태어난 시간과 계절의 흐름을 따라<br>나의 기질과 삶의 방향을 차분히 살펴보세요.</p><button class="primary" onclick="showPage('form')">내 사주 계산하기</button><div class="micro">정밀 절기 · 출생지역 진태양시 보정</div><div class="features"><div class="card"><i class="feature-icon">四</i><b>사주팔자</b><span>년주·월주·일주·시주를 실제 계산</span></div><div class="card"><i class="feature-icon">五</i><b>오행 분포</b><span>여덟 글자의 목·화·토·금·수를 분석</span></div><div class="card"><i class="feature-icon">日</i><b>일간 확인</b><span>나를 나타내는 일주의 천간 확인</span></div><div class="card"><i class="feature-icon">運</i><b>십성·대운</b><span>나와 주변의 관계, 삶의 큰 흐름을 확인</span></div></div></section>
 <section id="form" class="page form-page"><button class="back" onclick="showPage('home')">← 돌아가기</button><div class="form-intro"><span class="step-badge">BIRTH INFO</span><h2>태어난 순간을<br>알려주세요.</h2><p class="desc">정확한 사주 계산을 위해 아래 정보를 입력해주세요.</p></div><div class="field"><label>생일 기준</label><div class="choicegrid"><button class="choice calendar on" onclick="calendarPick(this,false)">양력</button><button class="choice calendar" onclick="calendarPick(this,true)">음력</button></div></div>
@@ -131,7 +201,7 @@ import { calculateFourPillars } from 'https://esm.sh/manseryeok@2.0.0';
 const stemEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':'토','경':'금','신':'금','임':'수','계':'수'};
 const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술':'토','축':'토','미':'토','신':'금','유':'금','해':'수','자':'수'};
 const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
-window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0)};
+window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0);requestAnimationFrame(()=>window.refreshSajuMotion?.(document.getElementById(id)))};
 let gender='',isLunar=false,isLeapMonth=false,unknownTime=false;
 const branchRel={
  합:[['자','축'],['인','해'],['묘','술'],['진','유'],['사','신'],['오','미']],
@@ -358,4 +428,40 @@ function render(r){
  if(currentIndex>=0){requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[currentIndex];if(btn){showLuck(currentIndex,btn);const row=btn.closest('.luck-scroll');if(row)row.scrollLeft=Math.max(0,btn.offsetLeft-row.clientWidth/2+btn.clientWidth/2);}window.scrollTo({top:0,left:0,behavior:'auto'});});}
  }else{document.getElementById('luckMeta').textContent='성별을 선택하면 대운을 계산합니다.';document.getElementById('luckPillars').innerHTML='';document.getElementById('currentLuckFocus').innerHTML='';showPage('result');}
 }
+
+function initSajuMotion(){
+ const reduced=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+ const stars=document.getElementById('sajuStars');
+ if(stars&&!stars.dataset.ready){
+  const count=window.innerWidth<520?34:58;
+  for(let i=0;i<count;i++){
+   const s=document.createElement('i');
+   const r=Math.random();
+   s.className='saju-star '+(r>.86?'big':r<.35?'tiny':'');
+   s.style.left=(Math.random()*100)+'%';
+   s.style.top=(Math.random()*100)+'%';
+   s.style.setProperty('--dur',(3.2+Math.random()*5.6)+'s');
+   s.style.setProperty('--delay',(-Math.random()*8)+'s');
+   s.style.setProperty('--drift',((Math.random()*18)-9)+'px');
+   stars.appendChild(s);
+  }
+  stars.dataset.ready='1';
+ }
+ if(reduced){document.querySelectorAll('.motion-reveal').forEach(el=>el.classList.add('motion-in'));return;}
+ if(!window._sajuObserver&&'IntersectionObserver' in window){
+  window._sajuObserver=new IntersectionObserver(entries=>entries.forEach(entry=>{
+   if(entry.isIntersecting){entry.target.classList.add('motion-in');window._sajuObserver.unobserve(entry.target);}
+  }),{threshold:.08,rootMargin:'0px 0px -24px 0px'});
+ }
+ window.refreshSajuMotion=(root=document)=>{
+  const targets=root.querySelectorAll?.('.card,.result-card,.now-card,.luck-detail,.form-page .field')||[];
+  targets.forEach((el,i)=>{
+   el.classList.add('motion-reveal');
+   el.style.setProperty('--reveal-delay',Math.min(i*32,180)+'ms');
+   if(reduced||!window._sajuObserver)el.classList.add('motion-in');else window._sajuObserver.observe(el);
+  });
+ };
+ window.refreshSajuMotion(document.querySelector('.page.on')||document);
+}
+initSajuMotion();
 </script></body></html>
