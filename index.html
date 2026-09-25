@@ -386,6 +386,7 @@ import { calculateFourPillars, lunarToSolar, getSolarTerm } from 'https://esm.sh
 const stemEl={'갑':'목','을':'목','병':'화','정':'화','무':'토','기':'토','경':'금','신':'금','임':'수','계':'수'};
 const branchEl={'인':'목','묘':'목','사':'화','오':'화','진':'토','술':'토','축':'토','미':'토','신':'금','유':'금','해':'수','자':'수'};
 const names={'갑':'갑목','을':'을목','병':'병화','정':'정화','무':'무토','기':'기토','경':'경금','신':'신금','임':'임수','계':'계수'};
+function escapeHtml(v){return String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));}
 window.showPage=id=>{document.querySelectorAll('.page').forEach(x=>x.classList.remove('on'));document.getElementById(id).classList.add('on');scrollTo(0,0);requestAnimationFrame(()=>window.refreshSajuMotion?.(document.getElementById(id)))};
 let gender='',isLunar=false,isLeapMonth=false,unknownTime=false;
 const branchRel={
@@ -516,7 +517,7 @@ function renderCurrentLuck(index){
  if(index<0||!lp[index]){box.innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 지금의 흐름</span><h3>현재 연령에 해당하는 대운을 찾지 못했습니다.</h3><p>입력한 생년월일과 대운 시작 시점을 다시 확인해주세요.</p></div>';return;}
  const cur=luckBundle(lp[index]),next=lp[index+1]?luckBundle(lp[index+1]):null,age=getCurrentAge(),endAge=Number(cur.x.age)+9;
  const nextText=next?'<div class="next-luck"><small>다음 흐름 미리보기 · '+next.x.age+'~'+(Number(next.x.age)+9)+'세 '+next.p+'</small><b>'+next.life.headline+'</b><span>'+next.personal.signature+'</span></div>':'';
- box.innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 지금의 흐름</span><div class="now-title-row"><div><small>현재 '+age+'세 · '+gender+' 기준</small><h3>'+cur.x.age+'~'+endAge+'세 · '+cur.p+' 대운</h3></div><span class="now-badge">현재 대운</span></div><div class="now-main"><b>'+cur.life.headline+'</b><p>'+cur.personal.signature+'</p></div><div class="now-actions"><div><em>✅ 지금 먼저 할 일</em><strong>'+cur.personal.action+'</strong></div><div><em>🚫 지금 피할 것</em><strong>'+cur.personal.taboo+'</strong></div><div><em>🤝 가까이할 사람</em><strong>'+cur.personal.helper+'</strong></div></div><div class="future-question"><b>앞으로 무엇을 대비할까?</b><p>'+cur.life.change+'</p><p>'+cur.life.caution+'</p></div>'+nextText+'<button class="jump-luck" onclick="document.querySelector(\'.luck-card\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">10년 흐름 전체 보기 ↓</button></div>';
+ box.innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 지금의 흐름</span><div class="now-title-row"><div><small>현재 만 '+age+'세 · '+gender+' 기준</small><h3>'+cur.x.age+'~'+endAge+'세 · '+cur.p+' 대운</h3></div><span class="now-badge">현재 대운</span></div><div class="now-main"><b>'+cur.life.headline+'</b><p>'+cur.personal.signature+'</p></div><div class="now-actions"><div><em>✅ 지금 먼저 할 일</em><strong>'+cur.personal.action+'</strong></div><div><em>🚫 지금 피할 것</em><strong>'+cur.personal.taboo+'</strong></div><div><em>🤝 가까이할 사람</em><strong>'+cur.personal.helper+'</strong></div></div><div class="future-question"><b>앞으로 무엇을 대비할까?</b><p>'+cur.life.change+'</p><p>'+cur.life.caution+'</p></div>'+nextText+'<button class="jump-luck" onclick="document.querySelector(\'.luck-card\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">10년 흐름 전체 보기 ↓</button></div>';
 }
 const yearlyTenGodText={
  비견:{theme:'내 기준과 독립성',do:'내 이름으로 남는 일 하나를 분명히 만들기',avoid:'친한 사람과 돈·역할을 애매하게 섞기'},
@@ -536,7 +537,8 @@ function yearPillarFor(year){
 }
 function yearlyBundle(year){
  const pillar=yearPillarFor(year),stem=pillar[0],branch=pillar[1],p=window._profile||{},tg=tenGodFor(p.dayStem,stem),base=yearlyTenGodText[tg]||{theme:'변화와 선택',do:'가장 중요한 한 가지를 정해 꾸준히 실행하기',avoid:'감정이 앞선 큰 결정'};
- const rel=[...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])];
+ const natal=window._natal||[],cur=currentLuckBundle(),curPoint=cur?[{label:'현재 대운',stem:cur.stem,branch:cur.branch}]:[];
+ const rel=[...stemRelations(stem,natal),...luckRelations(branch,natal),...tripleRelations(branch,natal.concat(curPoint)),...stemRelations(stem,curPoint),...luckRelations(branch,curPoint)];
  const types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
  let signal='';
  if(types.includes('충'))signal='원국과 충이 겹쳐 직장·관계·환경의 변화를 체감하기 쉬운 해로 볼 수 있습니다.';
@@ -570,10 +572,11 @@ const monthlyTenGodText={
  편인:{theme:'전문성을 깊게 팔 달',do:'혼자 파고든 지식을 실제 문제 해결에 써보기',avoid:'추측만으로 사람과 기회를 미리 끊기'}
 };
 function monthFlowBundle(year,month){
- const termIndex=(month-1)*2,term=getSolarTerm(year,termIndex),startDate=term.date;
+ const termIndex=(month-1)*2,term=getSolarTerm(year,termIndex);
  const sample=calculateFourPillars({year,month,day:15,hour:12,minute:0,dayBoundary:'midnight'}),pillar=sample.toObject().month;
  const stem=pillar[0],branch=pillar[1],p=window._profile||{},tg=tenGodFor(p.dayStem,stem),base=monthlyTenGodText[tg]||{theme:'균형을 다시 잡는 달',do:'가장 중요한 한 가지를 정해 실행하기',avoid:'감정적으로 큰 결정을 서두르기'};
- const rel=[...luckRelations(branch,window._natal||[]),...tripleRelations(branch,window._natal||[])],types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
+ const natal=window._natal||[],cur=currentLuckBundle(),curPoint=cur?[{label:'현재 대운',stem:cur.stem,branch:cur.branch}]:[];
+ const rel=[...stemRelations(stem,natal),...luckRelations(branch,natal),...tripleRelations(branch,natal.concat(curPoint)),...stemRelations(stem,curPoint),...luckRelations(branch,curPoint)],types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
  let signal='';
  if(types.includes('충'))signal='원국과 충이 겹쳐 일정·관계·업무 방식의 변화를 체감하기 쉬운 달입니다.';
  else if(types.includes('합'))signal='사람·일·기회가 연결되는 장면을 눈여겨볼 달입니다.';
@@ -633,8 +636,8 @@ function questionAnswer(type){
 }
 window.showQuestion=(type,el)=>{
  document.querySelectorAll('.question-btn').forEach(x=>x.classList.remove('on'));if(el)el.classList.add('on');
- const a=questionAnswer(type);
- document.getElementById('questionAnswer').innerHTML='<div class="qa-title">'+a.title+'</div><div class="qa-lead">'+a.lead+'</div><div class="qa-grid"><div><em>🧭 이렇게 해보세요</em><strong>'+a.act+'</strong></div><div><em>🔎 확인할 것</em><strong>'+a.check+'</strong></div></div><p class="qa-note">※ 원국·현재 대운·올해 세운을 함께 본 참고용 해석이며 실제 사건을 확정하는 예측은 아닙니다.</p>';
+ const a=questionAnswer(type),hasLuck=!!currentLuckBundle();
+ document.getElementById('questionAnswer').innerHTML='<div class="qa-title">'+a.title+'</div><div class="qa-lead">'+a.lead+'</div><div class="qa-grid"><div><em>🧭 이렇게 해보세요</em><strong>'+a.act+'</strong></div><div><em>🔎 확인할 것</em><strong>'+a.check+'</strong></div></div><p class="qa-note">※ 원국·'+(hasLuck?'현재 대운·':'')+'올해 세운을 함께 본 참고용 해석이며 실제 사건을 확정하는 예측은 아닙니다.</p>';
 };
 function renderQuestions(){
  const host=document.getElementById('questionFlow');if(!host)return;
@@ -789,7 +792,7 @@ window.saveSajuImage=()=>{
 function renderSajuSnapshot(){
  const host=document.getElementById('sajuSnapshot');if(!host)return;
  const s=buildSajuSnapshot();window._sajuSnapshot=s;
- host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+s.name+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="savedResultAction" class="saved-result-action"></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
+ host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+escapeHtml(s.name)+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="savedResultAction" class="saved-result-action"></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
  updateSaveButton();
 }
 
@@ -872,7 +875,7 @@ function renderSavedHome(){
  const host=document.getElementById('savedHome');if(!host)return;
  const data=readSavedSaju();
  if(!data||!data.year||!data.month||!data.day){host.hidden=true;host.innerHTML='';return}
- const label=(data.name||'내')+' 사주',saved=savedDateLabel(data.savedAt),time=data.unknownTime?'출생시간 미상':'출생시간 포함';
+ const label=escapeHtml(data.name||'내')+' 사주',saved=savedDateLabel(data.savedAt),time=data.unknownTime?'출생시간 미상':'출생시간 포함';
  host.hidden=false;
  host.innerHTML='<div class="saved-home-head"><span>저장된 내 사주</span><button onclick="deleteSavedSaju()" aria-label="저장된 사주 삭제">삭제</button></div>'+
  '<button class="saved-open" onclick="loadSavedSaju()"><span><b>'+label+'</b><small>'+time+(saved?' · '+saved+' 저장':'')+'</small></span><i>다시 보기 →</i></button>'+
@@ -1001,10 +1004,10 @@ window.calculateCompatibility=()=>{
   const A=compatPerson(compatInput('A')),B=compatPerson(compatInput('B')),r=compatibilityReading(A,B);
   const tags=[...(r.stemHap?['천간합 '+A.dayStem+B.dayStem]:[]),...r.branchRel.map(x=>x+' '+A.dayBranch+B.dayBranch),r.elRel.type];
   host.innerHTML='<div class="compat-result-head"><small>SAJUROUM · RELATIONSHIP</small><h3>'+r.headline+'</h3><p>점수로 좋고 나쁨을 정하기보다, 두 사람이 편해지는 방식과 부딪히기 쉬운 지점을 봅니다.</p></div>'+
-   '<div class="compat-pair"><div class="compat-person-mini"><small>'+A.input.name+'</small><b>'+A.dayMaster+'</b><span>'+A.obj.day+' 일주</span></div><i>♡</i><div class="compat-person-mini"><small>'+B.input.name+'</small><b>'+B.dayMaster+'</b><span>'+B.obj.day+' 일주</span></div></div>'+
-   '<div class="compat-insights"><div class="compat-insight"><em>✨ 두 사람의 연결점</em><b>'+r.elRel.type+'</b><p>'+r.strength+'</p><div class="compat-tags">'+tags.map(t=>'<span>'+t+'</span>').join('')+'</div></div>'+
-   '<div class="compat-insight"><em>🧭 실제 관계에서는</em><b>서로 다른 강점을 역할로 나눠보세요.</b><p>'+r.practical+'</p></div>'+
-   '<div class="compat-insight"><em>⚠️ 조정이 필요한 부분</em><b>갈등이 생길 때의 규칙을 미리 정하는 것이 중요해요.</b><p>'+r.caution+'</p></div></div>'+
+   '<div class="compat-pair"><div class="compat-person-mini"><small>'+escapeHtml(A.input.name)+'</small><b>'+A.dayMaster+'</b><span>'+A.obj.day+' 일주</span></div><i>♡</i><div class="compat-person-mini"><small>'+escapeHtml(B.input.name)+'</small><b>'+B.dayMaster+'</b><span>'+B.obj.day+' 일주</span></div></div>'+
+   '<div class="compat-insights"><div class="compat-insight"><em>✨ 두 사람의 연결점</em><b>'+escapeHtml(r.elRel.type)+'</b><p>'+escapeHtml(r.strength)+'</p><div class="compat-tags">'+tags.map(t=>'<span>'+escapeHtml(t)+'</span>').join('')+'</div></div>'+
+   '<div class="compat-insight"><em>🧭 실제 관계에서는</em><b>서로 다른 강점을 역할로 나눠보세요.</b><p>'+escapeHtml(r.practical)+'</p></div>'+
+   '<div class="compat-insight"><em>⚠️ 조정이 필요한 부분</em><b>갈등이 생길 때의 규칙을 미리 정하는 것이 중요해요.</b><p>'+escapeHtml(r.caution)+'</p></div></div>'+
    '<p class="compat-caution">※ 이 기본 궁합은 두 사람의 출생 날짜를 정오 기준으로 계산해 일간·일지·표면 오행과 일부 합·충·파·해 관계를 비교한 참고 해석입니다. 출생시간·지장간·용신·세운까지 포함한 종합 궁합은 아닙니다.</p>'+
    '<button class="compat-again" onclick="document.getElementById(\'compat\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">다른 두 사람 궁합 보기</button>';
   host.hidden=false;host.scrollIntoView({behavior:'smooth',block:'start'});requestAnimationFrame(()=>window.refreshSajuMotion?.(host));
@@ -1080,7 +1083,7 @@ function renderUnknown(samples){
    const lp=luck.stableSeq;window._luck=lp;
    document.getElementById('luckPillars').innerHTML='<div class="luck-scroll">'+lp.map((x,i)=>'<button class="pillar luck-btn" style="min-width:82px;background:var(--paper)" onclick="showLuck('+i+',this)"><small>'+x.age+'세</small><b>'+((x.pillar?.heavenlyStem||'')+(x.pillar?.earthlyBranch||''))+'</b><span>'+x.korean+'</span></button>').join('')+'</div><div id="luckDetail" class="luck-detail"><b>대운 순서 자체는 모든 시간대에서 동일합니다.</b><br>다만 시작 시점은 출생시간에 따라 달라질 수 있어 연령은 대략적으로 보세요.</div>';
    const currentAge=getCurrentAge(),idx=lp.findIndex(x=>currentAge>=Number(x.age)&&currentAge<=Number(x.age)+9);
-   document.getElementById('currentLuckFocus').innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 시간 미상 참고 분석</span><h3>현재 나이 '+currentAge+'세의 대운 흐름</h3><p>대운의 순서는 공통으로 확인되지만, 시작 나이는 출생시간에 따라 약 '+(luck.minAge===luck.maxAge?luck.minAge+'세':luck.minAge+'~'+luck.maxAge+'세')+' 범위에서 달라질 수 있습니다.</p><button class="jump-luck" onclick="document.querySelector(\'.luck-card\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">대운 흐름 보기 ↓</button></div>';
+   document.getElementById('currentLuckFocus').innerHTML='<div class="now-card"><span class="now-kicker">05 · NOW · 시간 미상 참고 분석</span><h3>현재 만 '+currentAge+'세의 대운 흐름</h3><p>대운의 순서는 공통으로 확인되지만, 시작 나이는 출생시간에 따라 약 '+(luck.minAge===luck.maxAge?luck.minAge+'세':luck.minAge+'~'+luck.maxAge+'세')+' 범위에서 달라질 수 있습니다.</p><button class="jump-luck" onclick="document.querySelector(\'.luck-card\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">대운 흐름 보기 ↓</button></div>';
    if(d){renderYearlyFlow();renderMonthlyFlow();renderQuestions();}else{document.getElementById('yearlyFlow').innerHTML='<div class="year-detail">출생시간에 따라 일간이 달라질 수 있어 연도별 십성 해석은 확정하지 않습니다.</div>';document.getElementById('monthlyFlow').innerHTML='<div class="month-detail">출생시간에 따라 일간이 달라질 수 있어 월별 십성 해석은 확정하지 않습니다.</div>';document.getElementById('questionFlow').innerHTML='<div class="question-answer">출생시간에 따라 일간이 달라질 수 있어 질문형 현재 해석은 확정하지 않습니다.</div>';}
    if(idx>=0)requestAnimationFrame(()=>{const btn=document.querySelectorAll('.luck-btn')[idx];if(btn)showLuck(idx,btn);window.scrollTo({top:0,left:0,behavior:'auto'});});
  }else{
