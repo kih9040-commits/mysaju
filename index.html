@@ -755,6 +755,92 @@ function renderSajuSnapshot(){
  const s=buildSajuSnapshot();window._sajuSnapshot=s;
  host.innerHTML='<div class="snapshot-card"><div class="snapshot-brand"><span>SAJUROUM · 四柱</span><small>'+(s.limited?'출생시간 미상 · 공통 분석':'나를 알아가는 새로운 사주')+'</small></div><div class="snapshot-name"><small>'+s.name+'님의 중심</small><b>'+s.dm+'</b><span>'+(s.axis?s.axis+' · '+s.axisTitle:'시간과 관계없이 확인되는 공통 결과')+'</span></div><div class="snapshot-lines"><div><em>지금</em><strong>'+s.luckText+'</strong></div><div><em>올해</em><strong>'+s.yearText+'</strong></div><div><em>이번 달</em><strong>'+s.monthText+'</strong></div></div><div class="snapshot-actions"><div><em>✅ 먼저 할 일</em><strong>'+s.action+'</strong></div><div><em>🚫 피할 것</em><strong>'+s.taboo+'</strong></div></div><div class="snapshot-privacy">공유 카드에는 생년월일·출생시간을 표시하지 않습니다.</div></div><div class="share-actions"><button onclick="shareSaju()">공유하기</button><button onclick="copySajuSummary()">내용 복사</button><button onclick="saveSajuImage()">이미지 저장</button></div><div id="shareStatus" class="share-status" aria-live="polite"></div>';
 }
+
+const SAVED_SAJU_KEY='sajurowoom.savedProfile.v1';
+function readSavedSaju(){
+ try{const raw=localStorage.getItem(SAVED_SAJU_KEY);return raw?JSON.parse(raw):null}catch(e){return null}
+}
+function captureCurrentSaju(){
+ const city=document.getElementById('city'),unknown=document.getElementById('unknownTime').checked;
+ return {
+  version:1,savedAt:new Date().toISOString(),
+  name:document.getElementById('name').value.trim(),
+  year:Number(document.getElementById('birthYear').value),
+  month:Number(document.getElementById('birthMonth').value),
+  day:Number(document.getElementById('birthDay').value),
+  isLunar:!!isLunar,isLeapMonth:!!isLeapMonth,unknownTime:unknown,
+  hour:unknown?null:Number(document.getElementById('hour').value),
+  minute:unknown?null:Number(document.getElementById('minute').value),
+  cityValue:city.value,cityLabel:city.options[city.selectedIndex]?.text||'',gender
+ };
+}
+function sameSavedProfile(a,b){
+ if(!a||!b)return false;
+ return ['name','year','month','day','isLunar','isLeapMonth','unknownTime','hour','minute','cityValue','gender'].every(k=>String(a[k]??'')===String(b[k]??''));
+}
+function savedDateLabel(iso){
+ try{return new Date(iso).toLocaleDateString('ko-KR',{year:'numeric',month:'numeric',day:'numeric'})}catch(e){return ''}
+}
+function updateSaveButton(){
+ const host=document.getElementById('savedResultAction');if(!host)return;
+ const saved=readSavedSaju(),current=captureCurrentSaju(),isSame=sameSavedProfile(saved,current);
+ host.innerHTML=isSame
+  ? '<button class="save-result saved" onclick="saveCurrentSaju()">✓ 이 사주가 저장되어 있어요</button><span>이 브라우저에만 저장됩니다.</span>'
+  : '<button class="save-result" onclick="saveCurrentSaju()">내 결과 저장</button><span>다음 방문 때 바로 다시 볼 수 있어요.</span>';
+}
+window.saveCurrentSaju=()=>{
+ const data=captureCurrentSaju();
+ try{
+  localStorage.setItem(SAVED_SAJU_KEY,JSON.stringify(data));
+  renderSavedHome();updateSaveButton();setShareStatus('이 브라우저에 내 사주를 저장했어요.');
+ }catch(e){setShareStatus('브라우저 저장을 사용할 수 없어요.');}
+};
+window.deleteSavedSaju=()=>{
+ try{localStorage.removeItem(SAVED_SAJU_KEY)}catch(e){}
+ renderSavedHome();updateSaveButton();
+};
+function restoreChoiceUi(data){
+ isLunar=!!data.isLunar;isLeapMonth=!!data.isLeapMonth;gender=data.gender||'';
+ document.querySelectorAll('.calendar').forEach((el,i)=>el.classList.toggle('on',i===(isLunar?1:0)));
+ document.getElementById('birthLabel').textContent=isLunar?'음력 생년월일':'양력 생년월일';
+ document.getElementById('leapField').style.display=isLunar?'block':'none';
+ document.querySelectorAll('.leap').forEach((el,i)=>el.classList.toggle('on',i===(isLeapMonth?1:0)));
+ document.querySelectorAll('.gender').forEach(el=>el.classList.toggle('on',el.textContent.trim()===gender));
+}
+window.loadSavedSaju=()=>{
+ const data=readSavedSaju();if(!data)return;
+ try{
+  restoreChoiceUi(data);
+  document.getElementById('name').value=data.name||'';
+  const y=document.getElementById('birthYear'),m=document.getElementById('birthMonth'),d=document.getElementById('birthDay');
+  y.value=String(data.year||'');m.value=String(data.month||'');
+  if(y.value&&m.value)syncBirth();
+  d.value=String(data.day||'');
+  if(y.value&&m.value&&d.value)syncBirth();
+  const city=document.getElementById('city');
+  if(data.cityValue&&[...city.options].some(o=>o.value===String(data.cityValue)))city.value=String(data.cityValue);
+  document.getElementById('unknownTime').checked=!!data.unknownTime;
+  window.toggleUnknownTime(!!data.unknownTime);
+  if(!data.unknownTime){
+   document.getElementById('hour').value=data.hour??'';
+   document.getElementById('minute').value=data.minute??'';
+  }
+  window.calculate();
+ }catch(e){
+  console.error(e);showPage('form');
+  document.getElementById('formError').textContent='저장된 정보를 불러오지 못했습니다. 다시 입력해주세요.';
+ }
+};
+function renderSavedHome(){
+ const host=document.getElementById('savedHome');if(!host)return;
+ const data=readSavedSaju();
+ if(!data||!data.year||!data.month||!data.day){host.hidden=true;host.innerHTML='';return}
+ const label=(data.name||'내')+' 사주',saved=savedDateLabel(data.savedAt),time=data.unknownTime?'출생시간 미상':'출생시간 포함';
+ host.hidden=false;
+ host.innerHTML='<div class="saved-home-head"><span>저장된 내 사주</span><button onclick="deleteSavedSaju()" aria-label="저장된 사주 삭제">삭제</button></div>'+
+ '<button class="saved-open" onclick="loadSavedSaju()"><span><b>'+label+'</b><small>'+time+(saved?' · '+saved+' 저장':'')+'</small></span><i>다시 보기 →</i></button>'+
+ '<p>기기에만 저장되며 서버로 전송하거나 계정에 보관하지 않습니다.</p>';
+}
 function luckLifeReading(stem,branch,rel){
  const el=stemEl[stem]||branchEl[branch]||'', types=[...new Set(rel.map(x=>x.split(' · ')[0]))];
  const focus={목:'성장과 확장',화:'성과와 표현',토:'안정과 기반',금:'결단과 재정비',수:'이동과 탐색'}[el]||'변화와 선택';
