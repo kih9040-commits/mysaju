@@ -679,9 +679,11 @@ function nextTopicPreview(type){
   if(cur)return '현재는 <b>'+cur.p+' 대운</b>입니다. 지금 이후의 10년 단위 흐름도 이어서 비교해보세요.';
   return '지금 이후 삶의 큰 방향이 언제 어떻게 바뀌는지 10년 흐름으로 확인해보세요.';
  }
+ if(type==='compat')return '내 사주를 바탕으로 다른 사람과의 <b>일간·일지 관계</b>를 비교해볼 수 있어요.';
  return '';
 }
 window.goNextTopic=(type)=>{
+ if(type==='compat'){window.openCompatibility(true);return;}
  if(['money','work','love','move'].includes(type)){
    const btn=document.querySelector('.question-btn[data-question="'+type+'"]');
    if(btn)window.showQuestion(type,btn);
@@ -699,7 +701,8 @@ function renderNextTopics(){
   ['love','❤️','연애·귀인 더 보기','관계와 도움되는 사람'],
   ['yearly','📅','올해 월별 흐름 보기','1월~12월의 변화'],
   ['move','🏠','이사·변화 더 보기','움직일 때 확인할 것'],
-  ['luck','🔮','10년 대운 다시 보기','큰 흐름과 다음 시기']
+  ['luck','🔮','10년 대운 다시 보기','큰 흐름과 다음 시기'],
+  ['compat','♡','두 사람 궁합 보기','관계의 연결점과 차이']
  ];
  host.innerHTML='<div class="next-topic-grid">'+topics.map(([type,icon,title,sub])=>'<button class="next-topic" onclick="goNextTopic(\''+type+'\')"><span class="next-icon">'+icon+'</span><span class="next-copy"><b>'+title+'</b><small>'+sub+'</small><em>'+nextTopicPreview(type)+'</em></span><i>→</i></button>').join('')+'</div><div class="next-ending"><b>사주는 답을 정해주는 것이 아니라,<br>내 선택을 조금 더 선명하게 보는 도구입니다.</b><span>궁금한 주제를 눌러 필요한 부분만 다시 살펴보세요.</span></div>';
 }
@@ -907,9 +910,106 @@ function initBirthSelects(){
  document.getElementById('birthDay').innerHTML='<option value="">일</option>';
 }
 initBirthSelects();
+initCompatSelects();
 window.calendarPick=(el,val)=>{isLunar=val;document.querySelectorAll('.calendar').forEach(x=>x.classList.remove('on'));el.classList.add('on');document.getElementById('birthLabel').textContent=val?'음력 생년월일':'양력 생년월일';document.getElementById('leapField').style.display=val?'block':'none';if(document.getElementById('birthYear').value&&document.getElementById('birthMonth').value)syncBirth()};
 window.leapPick=(el,val)=>{isLeapMonth=val;document.querySelectorAll('.leap').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
 window.genderPick=(el,val)=>{gender=val;document.querySelectorAll('.gender').forEach(x=>x.classList.remove('on'));el.classList.add('on')};
+
+function initCompatSelects(){
+ ['A','B'].forEach(s=>{
+  const y=document.getElementById('cYear'+s),m=document.getElementById('cMonth'+s),d=document.getElementById('cDay'+s);
+  if(!y||!m||!d)return;
+  y.innerHTML='<option value="">년도</option>'+Array.from({length:131},(_,i)=>2030-i).map(v=>'<option value="'+v+'">'+v+'년</option>').join('');
+  m.innerHTML='<option value="">월</option>'+Array.from({length:12},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'월</option>').join('');
+  d.innerHTML='<option value="">일</option>'+Array.from({length:31},(_,i)=>'<option value="'+(i+1)+'">'+(i+1)+'일</option>').join('');
+ });
+}
+window.toggleCompatLunar=(s)=>{
+ const lunar=document.getElementById('cCal'+s)?.value==='lunar',wrap=document.getElementById('cLeapWrap'+s);
+ if(wrap)wrap.style.display=lunar?'block':'none';
+};
+window.openCompatibility=(prefill=true)=>{
+ showPage('compat');
+ if(prefill)window.loadMyInfoToCompat();
+ requestAnimationFrame(()=>window.refreshSajuMotion?.(document.getElementById('compat')));
+};
+window.loadMyInfoToCompat=()=>{
+ const saved=readSavedSaju(),hasCurrent=document.getElementById('birthYear')?.value;
+ const data=hasCurrent?captureCurrentSaju():saved;
+ if(!data||!data.year)return;
+ document.getElementById('cNameA').value=data.name||'나';
+ document.getElementById('cYearA').value=String(data.year);
+ document.getElementById('cMonthA').value=String(data.month);
+ document.getElementById('cDayA').value=String(data.day);
+ document.getElementById('cCalA').value=data.isLunar?'lunar':'solar';
+ document.getElementById('cLeapA').value=data.isLeapMonth?'true':'false';
+ window.toggleCompatLunar('A');
+};
+function compatInput(s){
+ const y=Number(document.getElementById('cYear'+s).value),m=Number(document.getElementById('cMonth'+s).value),d=Number(document.getElementById('cDay'+s).value);
+ const isLunar=document.getElementById('cCal'+s).value==='lunar',isLeap=document.getElementById('cLeap'+s).value==='true';
+ if(!y||!m||!d)throw new Error(s+'의 생년월일을 모두 선택해주세요.');
+ if(!isLunar){const dt=new Date(y,m-1,d);if(dt.getFullYear()!==y||dt.getMonth()!==m-1||dt.getDate()!==d)throw new Error(s+'의 생년월일이 실제 달력에 없는 날짜입니다.');}
+ return {name:document.getElementById('cName'+s).value.trim()||(s==='A'?'첫 번째 사람':'두 번째 사람'),year:y,month:m,day:d,isLunar,isLeapMonth:isLunar?isLeap:false};
+}
+function compatPerson(input){
+ const r=calculateFourPillars({...input,hour:12,minute:0,dayBoundary:'midnight'});
+ const o=r.toObject(),counts=countElements(o),strong=Object.entries(counts).sort((a,b)=>b[1]-a[1])[0];
+ return {input,result:r,obj:o,dayStem:o.day[0],dayBranch:o.day[1],dayMaster:names[o.day[0]]||o.day[0],counts,strongest:strong};
+}
+function elementRelation(a,b){
+ const cycle=['목','화','토','금','수'],ia=cycle.indexOf(a),ib=cycle.indexOf(b);
+ if(ia<0||ib<0)return {type:'다름',text:'서로 다른 방식으로 상황을 해석할 수 있어 말로 기준을 맞추는 것이 중요합니다.'};
+ if(ia===ib)return {type:'같은 오행',text:'기본 속도가 비슷해 서로를 빨리 이해할 수 있지만, 같은 고집이 부딪히면 양보가 늦어질 수 있습니다.'};
+ if((ia+1)%5===ib)return {type:'A가 B를 돕는 흐름',text:'첫 번째 사람의 방식이 두 번째 사람의 행동과 성장을 자연스럽게 밀어주는 흐름으로 볼 수 있습니다.'};
+ if((ib+1)%5===ia)return {type:'B가 A를 돕는 흐름',text:'두 번째 사람의 방식이 첫 번째 사람의 행동과 성장을 자연스럽게 밀어주는 흐름으로 볼 수 있습니다.'};
+ if((ia+2)%5===ib)return {type:'A가 B를 제어하는 흐름',text:'첫 번째 사람이 기준을 세우려 하고 두 번째 사람이 압박으로 느끼지 않도록 역할과 표현을 조절하는 것이 중요합니다.'};
+ if((ib+2)%5===ia)return {type:'B가 A를 제어하는 흐름',text:'두 번째 사람이 기준을 세우려 하고 첫 번째 사람이 간섭으로 느끼지 않도록 역할과 표현을 조절하는 것이 중요합니다.'};
+ return {type:'상호 보완',text:'차이가 분명한 만큼 서로 없는 방식을 보완할 수 있지만 생활 습관과 결정 방식은 구체적으로 맞춰보는 편이 좋습니다.'};
+}
+function pairBranchRelations(a,b){
+ const out=[];
+ Object.entries(branchRel).forEach(([type,pairs])=>{if(pairs.some(p=>pairHas(p,a,b)))out.push(type)});
+ if(a===b&&['진','오','유','해'].includes(a))out.push('자형');
+ return [...new Set(out)];
+}
+function compatibilityReading(A,B){
+ const elA=stemEl[A.dayStem],elB=stemEl[B.dayStem],elRel=elementRelation(elA,elB),br=pairBranchRelations(A.dayBranch,B.dayBranch);
+ const stemHapHit=stemHap.some(p=>pairHas(p,A.dayStem,B.dayStem));
+ let headline='서로 다른 리듬을 이해할수록 편해지는 관계';
+ if(stemHapHit||br.includes('합'))headline='서로를 자연스럽게 끌어당기는 연결점이 있는 관계';
+ else if(br.includes('충'))headline='끌림과 변화가 함께 커질 수 있어 거리 조절이 중요한 관계';
+ else if(br.includes('해')||br.includes('파'))headline='작은 오해를 쌓지 않고 바로 확인하는 것이 중요한 관계';
+ let strength=stemHapHit?'일간의 천간합이 있어 서로의 방식에서 자연스럽게 연결점을 찾는 편으로 해석할 수 있습니다. ':elRel.text+' ';
+ if(br.includes('합'))strength+='일지에도 합 관계가 있어 가까운 생활과 관계에서 서로 맞춰가는 지점이 생기기 쉽습니다.';
+ else if(br.includes('충'))strength+='일지는 충 관계라 친해질수록 생활 방식이나 기대치 차이가 선명하게 느껴질 수 있습니다.';
+ else strength+='일지에 강한 합·충이 없으므로 실제 생활 습관과 대화 방식이 관계 만족도에 더 크게 작용할 수 있습니다.';
+ let caution='한쪽이 상대를 바꾸려 하기보다 서로 다른 결정 방식과 감정 표현 속도를 먼저 인정하는 편이 좋습니다.';
+ if(br.includes('충'))caution='감정이 올라온 순간 결론을 내리기보다, 서로의 생활 방식·거리감·연락 빈도처럼 구체적인 기대치를 말로 맞추는 것이 중요합니다.';
+ else if(br.includes('해')||br.includes('파'))caution='말하지 않은 기대나 추측이 쌓이면 오해가 커질 수 있으므로 작은 불편도 오래 묵히지 않는 편이 좋습니다.';
+ else if(br.includes('자형'))caution='비슷한 패턴을 반복하며 서로를 자극할 수 있으니 같은 문제로 부딪힐 때는 누가 맞는지보다 반복 원인을 찾는 편이 좋습니다.';
+ const practical=(()=>{
+  const sa=A.strongest?.[0],sb=B.strongest?.[0];
+  if(sa===sb)return '두 사람 모두 '+sa+' 기운이 상대적으로 많이 드러납니다. 장점도 비슷하지만 피곤할 때 같은 방식으로 밀어붙일 수 있어 한 사람이 잠시 속도를 낮추는 역할이 필요할 수 있습니다.';
+  return A.input.name+'님은 '+sa+', '+B.input.name+'님은 '+sb+' 기운이 상대적으로 많이 드러납니다. 서로 다른 강점을 역할 분담에 쓰면 관계가 훨씬 편해질 수 있습니다.';
+ })();
+ return {headline,elRel,branchRel:br,stemHap:stemHapHit,strength,caution,practical};
+}
+window.calculateCompatibility=()=>{
+ const err=document.getElementById('compatError'),host=document.getElementById('compatResult');err.textContent='';host.hidden=true;
+ try{
+  const A=compatPerson(compatInput('A')),B=compatPerson(compatInput('B')),r=compatibilityReading(A,B);
+  const tags=[...(r.stemHap?['천간합 '+A.dayStem+B.dayStem]:[]),...r.branchRel.map(x=>x+' '+A.dayBranch+B.dayBranch),r.elRel.type];
+  host.innerHTML='<div class="compat-result-head"><small>SAJUROUM · RELATIONSHIP</small><h3>'+r.headline+'</h3><p>점수로 좋고 나쁨을 정하기보다, 두 사람이 편해지는 방식과 부딪히기 쉬운 지점을 봅니다.</p></div>'+
+   '<div class="compat-pair"><div class="compat-person-mini"><small>'+A.input.name+'</small><b>'+A.dayMaster+'</b><span>'+A.obj.day+' 일주</span></div><i>♡</i><div class="compat-person-mini"><small>'+B.input.name+'</small><b>'+B.dayMaster+'</b><span>'+B.obj.day+' 일주</span></div></div>'+
+   '<div class="compat-insights"><div class="compat-insight"><em>✨ 두 사람의 연결점</em><b>'+r.elRel.type+'</b><p>'+r.strength+'</p><div class="compat-tags">'+tags.map(t=>'<span>'+t+'</span>').join('')+'</div></div>'+
+   '<div class="compat-insight"><em>🧭 실제 관계에서는</em><b>서로 다른 강점을 역할로 나눠보세요.</b><p>'+r.practical+'</p></div>'+
+   '<div class="compat-insight"><em>⚠️ 조정이 필요한 부분</em><b>갈등이 생길 때의 규칙을 미리 정하는 것이 중요해요.</b><p>'+r.caution+'</p></div></div>'+
+   '<p class="compat-caution">※ 이 기본 궁합은 두 사람의 출생 날짜를 정오 기준으로 계산해 일간·일지·표면 오행과 일부 합·충·파·해 관계를 비교한 참고 해석입니다. 출생시간·지장간·용신·세운까지 포함한 종합 궁합은 아닙니다.</p>'+
+   '<button class="compat-again" onclick="document.getElementById(\'compat\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">다른 두 사람 궁합 보기</button>';
+  host.hidden=false;host.scrollIntoView({behavior:'smooth',block:'start'});requestAnimationFrame(()=>window.refreshSajuMotion?.(host));
+ }catch(e){err.textContent=e.message||'궁합 계산 중 오류가 발생했습니다.';console.error(e)}
+};
 function countElements(o){let c={목:0,화:0,토:0,금:0,수:0};Object.values(o).join('').split('').forEach(ch=>{let e=stemEl[ch]||branchEl[ch];if(e)c[e]++});return c}
 window.showLuck=(i,el)=>{const x=(window._luck||[])[i];if(!x)return;document.querySelectorAll('.luck-btn').forEach(b=>b.classList.remove('on'));if(el)el.classList.add('on');const b=luckBundle(x),p=b.p,stem=b.stem,branch=b.branch,rel=b.rel,life=b.life,personal=b.personal,endAge=Number(x.age)+9;
  document.getElementById('luckDetail').innerHTML='<div class="luck-period">'+x.age+'~'+endAge+'세 · '+p+' 대운</div><div class="luck-headline">'+life.headline+'</div><div class="signature-box"><small>내 사주에 대입하면</small><b>'+personal.signature+'</b></div><div class="fresh-grid"><div><em>🚫 이 시기 금기</em><strong>'+personal.taboo+'</strong></div><div><em>🤝 도움되는 사람</em><strong>'+personal.helper+'</strong></div><div><em>🎨 보완 컬러</em><strong>'+personal.color+'</strong></div><div><em>🧿 상징 소품</em><strong>'+personal.item+'</strong></div><div class="wide"><em>✅ 가장 먼저 해볼 것</em><strong>'+personal.action+'</strong></div></div><div class="decade-overview"><b>🔎 이 10년, 현실에서는</b><p>'+life.overview+'</p></div><div class="life-grid"><div><b>💼 일·직업</b><span>'+life.work+'</span></div><div><b>💰 돈·현실</b><span>'+life.money+'</span></div><div><b>❤️ 연애·관계</b><span>'+life.love+'</span></div><div><b>⚡ 변화 포인트</b><span>'+life.change+'</span></div><div class="wide"><b>⚠️ 주의할 점</b><span>'+life.caution+'</span></div></div><div class="symbol-note">※ 컬러·소품은 <b>오행의 단순 개수에서 상대적으로 적은 기운을 상징적으로 보완해보는 재미 요소</b>입니다. 용신·행운색을 확정한 결과는 아닙니다.</div><details class="theory-details"><summary>왜 이렇게 나왔는지 보기</summary><div class="theory-toggle">'+(personal.tenGod?'<div class="tags"><span class="tag">대운 천간 십성 · '+personal.tenGod+'</span></div>':'')+(rel.length?'<div class="tags">'+rel.map(v=>'<span class="tag">'+v+'</span>').join('')+'</div>':'<div class="tags"><span class="tag">주요 합·충·파·해 없음</span></div>')+'<p>'+relationNarrative(rel)+'</p></div></details>'};
