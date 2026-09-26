@@ -1262,4 +1262,7 @@ function initSajuMotion(){
 }
 renderSavedHome();
 initSajuMotion();
+const initialView=new URLSearchParams(location.search).get('view');
+if(initialView==='compat')window.openCompatibility(false);
+else if(initialView==='saju')window.showPage('form');
 </script></body></html>
